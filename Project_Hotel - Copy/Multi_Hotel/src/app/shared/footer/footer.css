@@ -1,0 +1,53 @@
+.site-footer {
+  background: #0a1628;
+  color: rgba(255,255,255,0.7);
+  padding: 3rem 0 1.5rem;
+  margin-top: 3rem;
+}
+.f-logo {
+  font-family: 'Georgia', serif;
+  font-size: 1.4rem; color: #c9a84c;
+  font-weight: 700; margin-bottom: 0.8rem;
+}
+.f-logo span { color: rgba(255,255,255,0.7); }
+.f-desc { font-size: 0.88rem; line-height: 1.7; }
+.f-badges { display: flex; gap: 0.6rem; margin-top: 1rem; flex-wrap: wrap; }
+.f-badge {
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.25);
+  color: #c9a84c; padding: 0.25rem 0.7rem;
+  border-radius: 50px; font-size: 0.78rem;
+}
+.f-head {
+  color: white; font-weight: 600;
+  margin-bottom: 1rem; font-size: 0.9rem;
+}
+.f-list {
+  list-style: none; padding: 0; margin: 0;
+}
+.f-list li {
+  margin-bottom: 0.5rem; font-size: 0.85rem;
+  cursor: pointer; transition: color 0.2s;
+}
+.f-list li:hover, .f-list li a:hover { color: #c9a84c; }
+.f-list li a { color: rgba(255,255,255,0.7); text-decoration: none; }
+.f-subscribe { display: flex; gap: 0; border-radius: 8px; overflow: hidden; }
+.f-subscribe input {
+  flex: 1; padding: 0.55rem 0.8rem;
+  border: none; outline: none; font-size: 0.88rem;
+  background: rgba(255,255,255,0.1); color: white;
+}
+.f-subscribe input::placeholder { color: rgba(255,255,255,0.4); }
+.f-subscribe button {
+  padding: 0.55rem 1rem;
+  background: #c9a84c; color: #0a1628;
+  border: none; font-weight: 600;
+  font-size: 0.85rem; cursor: pointer;
+}
+.f-hr {
+  border-color: rgba(255,255,255,0.1);
+  margin: 2rem 0 1rem;
+}
+.f-copy {
+  text-align: center; font-size: 0.82rem; margin: 0;
+}

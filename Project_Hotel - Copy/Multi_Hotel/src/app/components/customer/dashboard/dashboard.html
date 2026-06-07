@@ -1,0 +1,55 @@
+<app-customer-layout
+  [pageTitle]="'Welcome back, ' + (user?.name || 'Traveler') + '!'"
+  pageSub="Your travel overview at a glance">
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="mc-icon">📅</div>
+      <div class="mc-val">{{ upcomingBookings }}</div>
+      <div class="mc-label">Upcoming Stays</div>
+    </div>
+    <div class="metric-card">
+      <div class="mc-icon">📋</div>
+      <div class="mc-val">{{ bookings.length }}</div>
+      <div class="mc-label">Total Bookings</div>
+    </div>
+    <div class="metric-card">
+      <div class="mc-icon">💰</div>
+      <div class="mc-val">৳{{ totalSpent | number }}</div>
+      <div class="mc-label">Total Spent</div>
+    </div>
+  </div>
+
+  <div class="table-card mt-4">
+    <div class="tc-head">
+      <h3>Recent Bookings</h3>
+      <a routerLink="/customer/my-bookings" class="see-all">View all →</a>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Hotel</th><th>Check-in</th><th>Nights</th><th>Price</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let b of bookings.slice(0,5)">
+            <td>{{ b.hotelEmoji }} <strong>{{ b.hotelName }}</strong></td>
+            <td>{{ b.checkIn }}</td>
+            <td>{{ b.nights }}</td>
+            <td>৳{{ b.totalPrice | number }}</td>
+            <td>
+              <span class="status-badge"
+                    [class.s-confirmed]="b.status==='Confirmed'"
+                    [class.s-pending]="b.status==='Pending'"
+                    [class.s-cancelled]="b.status==='Cancelled'">
+                {{ b.status }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="bookings.length === 0">
+            <td colspan="5" class="empty-row">You haven't made any bookings yet. <a routerLink="/hotels" class="gold">Explore Hotels</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-customer-layout>

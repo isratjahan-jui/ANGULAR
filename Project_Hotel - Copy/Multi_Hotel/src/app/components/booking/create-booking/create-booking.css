@@ -1,0 +1,135 @@
+.page-hero {
+  background: linear-gradient(135deg, #0a1628, #132040);
+  padding: 2.5rem 2rem; text-align: center;
+}
+.page-hero h1 {
+  font-family: 'Georgia', serif; color: white;
+  font-size: 2rem; font-weight: 700; margin-bottom: 0.4rem;
+}
+.page-hero p { color: rgba(255,255,255,0.6); }
+
+.booking-grid {
+  display: grid; grid-template-columns: 1fr 380px; gap: 2rem;
+}
+
+/* FORM */
+.booking-form {
+  background: white; border-radius: 16px;
+  padding: 2rem; border: 1px solid #e5e0d5;
+}
+.form-title {
+  font-family: 'Georgia', serif; font-size: 1.3rem;
+  color: #0a1628; margin-bottom: 1.5rem;
+}
+.date-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.fg { display: flex; flex-direction: column; gap: 5px; }
+.fg label {
+  font-size: 0.73rem; font-weight: 700; color: #6b7280;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+.fg input, .fg select, .fg textarea {
+  padding: 0.7rem 1rem; border: 1.5px solid #e5e0d5;
+  border-radius: 8px; font-size: 0.92rem; color: #1a1a2e;
+  outline: none; font-family: inherit; transition: border-color 0.2s;
+  background: #fafafa;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus {
+  border-color: #c9a84c; background: white;
+}
+.fg textarea { resize: vertical; }
+
+.payment-section {
+  background: #f8f4ed; border-radius: 12px;
+  padding: 1.3rem; border: 1px solid #e5e0d5;
+}
+.ps-title {
+  font-family: 'Georgia', serif; font-size: 1rem;
+  color: #0a1628; margin-bottom: 1rem;
+}
+.pay-options { display: flex; gap: 0.8rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+.pay-opt {
+  padding: 0.45rem 1rem; border-radius: 8px;
+  border: 1.5px solid #e5e0d5; font-size: 0.85rem;
+  cursor: pointer; background: white; transition: all 0.2s;
+}
+.pay-opt.active { border-color: #0a1628; background: #0a1628; color: #c9a84c; }
+
+.error-msg {
+  background: #fee2e2; color: #991b1b;
+  padding: 0.6rem 0.9rem; border-radius: 8px;
+  font-size: 0.85rem; margin-top: 0.8rem; border: 1px solid #fecaca;
+}
+.confirm-btn {
+  width: 100%; padding: 0.9rem; margin-top: 1.5rem;
+  background: #0a1628; color: white; border: none;
+  border-radius: 10px; font-weight: 700; font-size: 1rem;
+  cursor: pointer; transition: background 0.2s;
+}
+.confirm-btn:hover:not(:disabled) { background: #c9a84c; color: #0a1628; }
+.confirm-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-row { display: flex; flex-direction: column; gap: 0.75rem; }
+.pay-btn-secondary {
+  width: 100%; padding: 0.85rem;
+  background: white; color: #0a1628;
+  border: 2px solid #0a1628; border-radius: 10px;
+  font-weight: 700; font-size: 0.95rem; cursor: pointer;
+}
+.pay-btn-secondary:hover:not(:disabled) { background: #f8f4ed; }
+.pay-btn-secondary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* SUMMARY */
+.booking-summary {
+  background: white; border-radius: 16px;
+  padding: 1.5rem; border: 1px solid #e5e0d5;
+  height: fit-content; position: sticky; top: 80px;
+}
+.hotel-preview {
+  display: flex; gap: 1rem; align-items: flex-start;
+  padding-bottom: 1rem; border-bottom: 1px solid #e5e0d5; margin-bottom: 1rem;
+}
+.hp-emoji { font-size: 3rem; }
+.hp-name {
+  font-family: 'Georgia', serif; font-size: 1rem;
+  color: #0a1628; margin: 0 0 0.2rem;
+}
+.hp-loc { font-size: 0.82rem; color: #6b7280; margin: 0 0 0.3rem; }
+.hp-stars { font-size: 0.9rem; }
+.hp-rn { font-size: 0.78rem; color: #6b7280; margin-left: 4px; }
+
+.summary-rows { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+.sr {
+  display: flex; justify-content: space-between;
+  font-size: 0.87rem;
+}
+.sr-label { color: #6b7280; }
+.sr-val { font-weight: 500; color: #0a1628; }
+
+.total-box {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.9rem 1rem; background: #0a1628;
+  border-radius: 10px; margin-bottom: 1rem;
+}
+.total-box span { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+.total-val {
+  font-family: 'Georgia', serif; font-size: 1.3rem;
+  font-weight: 700; color: #c9a84c;
+}
+
+.fac-title { font-size: 0.75rem; font-weight: 700; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem; }
+.facs { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.fac {
+  font-size: 0.72rem; background: #f8f4ed; color: #6b7280;
+  padding: 3px 8px; border-radius: 4px; border: 1px solid #e5e0d5;
+}
+
+.guarantee-box {
+  display: flex; flex-direction: column; gap: 0.4rem;
+  margin-top: 1rem; padding: 0.8rem 1rem;
+  background: #f8f4ed; border-radius: 8px;
+  font-size: 0.82rem; color: #6b7280;
+}
+
+@media (max-width: 900px) {
+  .booking-grid { grid-template-columns: 1fr; }
+  .booking-summary { position: static; }
+}

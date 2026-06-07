@@ -1,0 +1,20 @@
+.page-hero { background:linear-gradient(135deg,#0a1628,#132040); padding:2.5rem; text-align:center; }
+.page-hero h1 { font-family:'Georgia',serif; color:white; font-size:2rem; font-weight:700; margin-bottom:0.3rem; }
+.page-hero p { color:rgba(255,255,255,0.6); }
+.empty-state { text-align:center; padding:4rem; }
+.empty-state h3 { font-family:'Georgia',serif; color:#0a1628; margin:1rem 0 0.5rem; }
+.es-btn { display:inline-block; margin-top:1rem; padding:0.7rem 2rem; background:#0a1628; color:white; border-radius:10px; font-weight:600; }
+.booking-cards { display:flex; flex-direction:column; gap:1rem; }
+.checkin-card {
+  background:white; border-radius:14px; border:1px solid #e5e0d5;
+  padding:1.3rem; display:flex; align-items:center; gap:1.2rem;
+}
+.cc-emoji { font-size:3rem; flex-shrink:0; }
+.cc-info { flex:1; }
+.cc-info h4 { font-family:'Georgia',serif; color:#0a1628; margin-bottom:0.2rem; }
+.cc-info p { font-size:0.85rem; color:#6b7280; margin-bottom:0.5rem; }
+.cc-row { display:flex; gap:1.2rem; font-size:0.85rem; color:#6b7280; flex-wrap:wrap; }
+.cc-right { text-align:right; }
+.cc-price { font-family:'Georgia',serif; font-size:1.2rem; font-weight:700; color:#0a1628; margin-bottom:0.3rem; }
+.status-badge { padding:0.22rem 0.65rem; border-radius:50px; font-size:0.75rem; font-weight:600; }
+.s-confirmed { background:#d1fae5; color:#065f46; }

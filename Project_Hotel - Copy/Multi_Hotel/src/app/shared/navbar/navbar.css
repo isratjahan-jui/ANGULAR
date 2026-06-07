@@ -1,0 +1,12 @@
+.nav-link {
+  color: rgba(255,255,255,0.75) !important;
+  font-weight: 500;
+  font-size: 0.92rem;
+  transition: color 0.2s;
+}
+.nav-link:hover {
+  color: #c9a84c !important;
+}
+.active-link {
+  color: #c9a84c !important;
+}

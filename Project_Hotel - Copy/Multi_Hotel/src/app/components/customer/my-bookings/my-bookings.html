@@ -1,0 +1,160 @@
+<app-customer-layout
+  pageTitle="My Booking History"
+  pageSub="Track your stays and manage your reservations">
+
+  <div class="bookings-list" *ngIf="bookings.length > 0; else noBookings">
+    <div class="booking-card" *ngFor="let b of bookings">
+      <div class="booking-header">
+        <div class="hotel-info">
+          <span class="emoji">{{b.hotelEmoji}}</span>
+          <div>
+            <h3>{{b.hotelName}}</h3>
+            <p><i class="fas fa-map-marker-alt"></i> {{b.hotelLocation}}</p>
+          </div>
+        </div>
+        <div class="status-badge" [ngClass]="getStatusClass(b.status)">
+          {{b.status}}
+        </div>
+      </div>
+      
+      <div class="booking-body">
+        <div class="info-group">
+          <label>Room Type</label>
+          <span>{{b.roomType}}</span>
+        </div>
+        <div class="info-group">
+          <label>Stay Dates</label>
+          <span>{{b.checkIn}} to {{b.checkOut}} ({{b.nights}} nights)</span>
+        </div>
+        <div class="info-group">
+          <label>Guests</label>
+          <span>{{b.guests}}</span>
+        </div>
+        <div class="info-group">
+          <label>Total Paid</label>
+          <span class="total-price">৳{{b.totalPrice}}</span>
+        </div>
+      </div>
+
+      <div class="booking-footer">
+        <button class="btn-invoice" (click)="viewInvoice(b.id)">
+          <i class="fas fa-file-invoice"></i> View Invoice
+        </button>
+        <button class="btn-cancel" 
+                *ngIf="b.status !== 'Cancelled' && b.status !== 'CheckedOut'" 
+                (click)="cancelBooking(b.id)">
+          Cancel Booking
+        </button>
+        <div class="cancellation-reason" *ngIf="b.status === 'Cancelled' && b.cancellationReason">
+          <strong>Reason:</strong> {{b.cancellationReason}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noBookings>
+    <div class="empty-state">
+      <div class="icon">📅</div>
+      <h3>No bookings found</h3>
+      <p>You haven't made any reservations yet.</p>
+      <button class="btn-primary" (click)="router.navigate(['/hotels'])">Browse Hotels</button>
+    </div>
+  </ng-template>
+
+  <!-- Invoice Modal -->
+  <div class="modal-overlay" *ngIf="showInvoiceModal" (click)="showInvoiceModal = false">
+    <div class="invoice-box" (click)="$event.stopPropagation()">
+      <div class="invoice-brand">
+        <div class="brand-logo">Stay<span>Sphere</span></div>
+        <div class="invoice-title">Official Receipt</div>
+      </div>
+
+      <div class="invoice-meta">
+        <div class="meta-left">
+          <label>Invoice Number</label>
+          <p>#{{selectedInvoice?.invoiceNumber}}</p>
+          <label>Issued Date</label>
+          <p>{{selectedInvoice?.issuedAt | date:'longDate'}}</p>
+        </div>
+        <div class="meta-right">
+          <label>Payment Method</label>
+          <p>Digital Payment</p>
+          <label>Status</label>
+          <p class="paid-badge">PAID</p>
+        </div>
+      </div>
+
+      <div class="invoice-parties">
+        <div class="party">
+          <label>Billed To</label>
+          <h4>{{selectedInvoice?.customerName}}</h4>
+          <p>StaySphere Verified Traveler</p>
+        </div>
+        <div class="party text-right">
+          <label>Provider</label>
+          <h4>{{selectedInvoice?.hotelName}}</h4>
+          <p>Authorized Partner</p>
+        </div>
+      </div>
+
+      <div class="invoice-table-wrap">
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th class="text-right">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>{{selectedInvoice?.roomType}} Accommodation</strong>
+                <small>Standard booking rate including amenities</small>
+              </td>
+              <td class="text-right">৳{{selectedInvoice?.amount | number}}</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Processing & Service Fees</strong>
+                <small>Including platform commission</small>
+              </td>
+              <td class="text-right">৳0.00</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Government Tax (15%)</strong>
+                <small>VAT applied on base amount</small>
+              </td>
+              <td class="text-right">৳{{selectedInvoice?.tax | number}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="invoice-total">
+        <div class="total-row">
+          <span>Subtotal</span>
+          <span>৳{{selectedInvoice?.amount | number}}</span>
+        </div>
+        <div class="total-row">
+          <span>Total Tax</span>
+          <span>৳{{selectedInvoice?.tax | number}}</span>
+        </div>
+        <div class="total-row grand-total">
+          <span>Amount Paid</span>
+          <span>৳{{selectedInvoice?.total | number}}</span>
+        </div>
+      </div>
+
+      <div class="invoice-footer">
+        <p>This is a computer-generated document. No signature required.</p>
+        <div class="actions">
+          <button class="btn-print" (click)="window.print()">
+            <i class="fas fa-print"></i> Print PDF
+          </button>
+          <button class="btn-close" (click)="showInvoiceModal = false">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-customer-layout>

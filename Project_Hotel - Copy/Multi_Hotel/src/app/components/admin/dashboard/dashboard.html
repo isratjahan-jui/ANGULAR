@@ -1,0 +1,127 @@
+<div class="admin-layout" [class.sidebar-open]="isSidebarOpen">
+  <div class="sidebar-overlay" (click)="toggleSidebar()"></div>
+  <aside class="admin-sidebar">
+    <div class="sb-brand">Stay<span>Sphere</span> Admin</div>
+    <nav class="sb-nav">
+      <a routerLink="/admin/dashboard" routerLinkActive="sb-active" class="sb-link" (click)="isSidebarOpen = false">📊 Dashboard</a>
+      <a routerLink="/admin/manage-users" routerLinkActive="sb-active" class="sb-link" (click)="isSidebarOpen = false">👥 Manage Users</a>
+      <a routerLink="/admin/manage-hotels" routerLinkActive="sb-active" class="sb-link" (click)="isSidebarOpen = false">🏨 Manage Hotels</a>
+      <a routerLink="/admin/coupons" routerLinkActive="sb-active" class="sb-link" (click)="isSidebarOpen = false">🎟️ Manage Coupons</a>
+      <a routerLink="/admin/reports" routerLinkActive="sb-active" class="sb-link" (click)="isSidebarOpen = false">📈 Reports</a>
+      <a routerLink="/admin/commission" routerLinkActive="sb-active" class="sb-link" (click)="isSidebarOpen = false">💰 Commission</a>
+      <a routerLink="/admin/transactions" routerLinkActive="sb-active" class="sb-link" (click)="isSidebarOpen = false">💳 Transactions</a>
+      <a routerLink="/admin/invoices" routerLinkActive="sb-active" class="sb-link" (click)="isSidebarOpen = false">📄 Invoices</a>
+      <a routerLink="/profile" routerLinkActive="sb-active" class="sb-link" (click)="isSidebarOpen = false">👤 Profile</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <header class="top-bar">
+      <div class="user-meta">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button class="sb-hamburger" (click)="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div>
+            <h3>Welcome, {{admin?.name}}</h3>
+            <p>{{today}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="header-user" *ngIf="admin">
+        <div class="admin-avatar" *ngIf="!admin.image">{{admin.name[0].toUpperCase()}}</div>
+        <img [src]="admin.image" *ngIf="admin.image" class="admin-avatar-img" alt="Admin">
+      </div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="icon users"><i class="fas fa-users"></i></div>
+        <div class="stat-info">
+          <label>Total Users</label>
+          <h3>{{users.length}}</h3>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="icon hotels"><i class="fas fa-hotel"></i></div>
+        <div class="stat-info">
+          <label>Total Hotels</label>
+          <h3>{{hotels.length}}</h3>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="icon revenue"><i class="fas fa-money-bill-wave"></i></div>
+        <div class="stat-info">
+          <label>Platform Commission</label>
+          <h3>৳{{platformEarnings}}</h3>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="icon occupancy"><i class="fas fa-chart-line"></i></div>
+        <div class="stat-info">
+          <label>Occupancy Rate</label>
+          <h3>{{occupancyRate}}%</h3>
+        </div>
+      </div>
+    </div>
+
+    <section class="dashboard-sections mb-4">
+      <div class="section-card" style="grid-column: 1 / -1;">
+        <div class="section-header">
+          <h3>Platform Revenue Overview</h3>
+        </div>
+        <div style="position: relative; height: 300px; width: 100%;">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-sections">
+      <div class="section-card">
+        <div class="section-header">
+          <h3>Pending Hotel Approvals</h3>
+          <button routerLink="/admin/manage-hotels" class="btn-link">View All</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Hotel Name</th>
+              <th>Location</th>
+              <th>Owner ID</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let h of hotels">
+              <tr *ngIf="!h.approved">
+                <td>{{h.name}}</td>
+                <td>{{h.location}}</td>
+                <td>{{h.ownerId}}</td>
+                <td>
+                  <button class="btn-approve" (click)="approveHotel(h.id?.toString())">Approve</button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <h3>Recent Bookings</h3>
+          <button class="btn-link">View All</button>
+        </div>
+        <div class="recent-list">
+          <div class="recent-item" *ngFor="let b of bookings | slice:0:5">
+            <div class="item-icon">{{b.hotelEmoji}}</div>
+            <div class="item-info">
+              <h4>{{b.hotelName}}</h4>
+              <p>{{b.checkIn}} - {{b.status}}</p>
+            </div>
+            <div class="item-amount">৳{{b.totalPrice}}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

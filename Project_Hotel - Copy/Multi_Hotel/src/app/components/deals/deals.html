@@ -1,0 +1,89 @@
+<!-- deals.html -->
+<section class="deals-hero">
+
+  <div class="container">
+
+    <span class="deal-mini">
+      🔥 LIMITED TIME OFFERS
+    </span>
+
+    <h1 class="deal-title">
+      Exclusive Hotel Deals
+    </h1>
+
+    <p class="deal-sub">
+      Save big on luxury stays across Bangladesh.
+    </p>
+
+  </div>
+
+</section>
+
+<div class="container py-5">
+
+  <div class="deals-grid">
+
+    <div
+      class="deal-card"
+      *ngFor="let d of deals"
+    >
+
+      <!-- Top -->
+      <div class="deal-top">
+
+        <div class="deal-emoji">
+          {{ d.emoji }}
+        </div>
+
+        <div class="deal-badge">
+          {{ d.discount }}
+        </div>
+
+      </div>
+
+      <!-- Body -->
+      <div class="deal-body">
+
+        <p class="deal-location">
+          📍 {{ d.location }}
+        </p>
+
+        <h3 class="deal-name">
+          {{ d.title }}
+        </h3>
+
+        <p class="deal-desc">
+          {{ d.desc }}
+        </p>
+
+        <div class="deal-price">
+          From
+          <strong>
+            ৳{{ d.price | number }}
+          </strong>
+          /night
+        </div>
+
+        <div class="coupon-box">
+
+          <span class="coupon-label">
+            Coupon Code
+          </span>
+
+          <div class="coupon-code">
+            {{ d.code }}
+          </div>
+
+        </div>
+
+        <button class="claim-btn">
+          Claim Deal
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

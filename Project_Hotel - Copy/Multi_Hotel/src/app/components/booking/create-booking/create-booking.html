@@ -1,0 +1,149 @@
+<div class="page-hero">
+  <h1>Complete Your Booking</h1>
+  <p>You're one step away from your perfect stay</p>
+</div>
+
+<div class="container my-5">
+  <div *ngIf="loadError" class="alert alert-danger text-center">{{ loadError }}</div>
+
+  <div class="booking-grid" *ngIf="hotel && !loadError">
+
+    <div class="booking-form">
+      <h3 class="form-title">Booking Details</h3>
+
+      <div class="fg mt-3" *ngIf="rooms.length > 0">
+        <label>Room Type</label>
+        <select
+          [ngModel]="selectedRoom?.id"
+          (ngModelChange)="onRoomIdChange($event)"
+          name="room">
+          <option *ngFor="let r of rooms" [value]="r.id">
+            {{ r.roomType }} — ৳{{ r.price | number }}/night
+          </option>
+        </select>
+      </div>
+
+      <div class="date-row">
+        <div class="fg">
+          <label>Check-in Date</label>
+          <input type="date" [(ngModel)]="checkIn" name="checkIn" (change)="onDatesChange()" />
+        </div>
+        <div class="fg">
+          <label>Check-out Date</label>
+          <input type="date" [(ngModel)]="checkOut" name="checkOut" (change)="onDatesChange()" />
+        </div>
+      </div>
+
+      <div class="availability-status mt-2" *ngIf="checkIn && checkOut && checkOut > checkIn">
+        <span *ngIf="checkingAvailability" style="color: #6b7280; font-size: 0.85rem;">⏳ Checking room availability...</span>
+        <span *ngIf="!checkingAvailability && isAvailable === true" style="color: #065f46; background: #d1fae5; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">🟢 Available</span>
+        <span *ngIf="!checkingAvailability && isAvailable === false" style="color: #991b1b; background: #fee2e2; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">🔴 Not Available</span>
+      </div>
+
+      <div class="fg mt-3">
+        <label>Number of Guests</label>
+        <select [(ngModel)]="guests" name="guests">
+          <option *ngFor="let g of guestOptions" [value]="g">{{ g }}</option>
+        </select>
+      </div>
+
+      <div class="fg mt-3">
+        <label>Special Requests (optional)</label>
+        <textarea [(ngModel)]="requests" name="requests" rows="3"
+                  placeholder="Dietary needs, room preferences, accessibility..."></textarea>
+      </div>
+
+      <div class="error-msg" *ngIf="error">⚠ {{ error }}</div>
+
+      <div class="btn-row mt-4">
+        <button type="button" class="confirm-btn" (click)="confirm()" [disabled]="loading">
+          <span *ngIf="!loading">Confirm Booking — ৳{{ total | number }}</span>
+          <span *ngIf="loading">Processing...</span>
+        </button>
+        <button type="button" class="pay-btn-secondary" (click)="payNow()" [disabled]="loading">
+          Pay Now &amp; Confirm
+        </button>
+      </div>
+    </div>
+
+    <div class="booking-summary">
+      <div class="hotel-preview">
+        <div class="hp-emoji">{{ hotel.emoji }}</div>
+        <div>
+          <h4 class="hp-name">{{ hotel.name }}</h4>
+          <p class="hp-loc">📍 {{ hotel.location }}</p>
+          <div class="hp-stars">
+            <span *ngFor="let s of [1,2,3,4,5]"
+                  [style.color]="s <= (hotel.rating || 0) ? '#c9a84c' : '#e5e0d5'">★</span>
+            <span class="hp-rn">{{ hotel.rating }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-rows">
+        <div class="sr">
+          <span class="sr-label">Room Type</span>
+          <span class="sr-val">{{ selectedRoom?.roomType || hotel.type }}</span>
+        </div>
+        <div class="sr">
+          <span class="sr-label">Check-in</span>
+          <span class="sr-val">{{ checkIn }}</span>
+        </div>
+        <div class="sr">
+          <span class="sr-label">Check-out</span>
+          <span class="sr-val">{{ checkOut }}</span>
+        </div>
+        <div class="sr">
+          <span class="sr-label">Nights</span>
+          <span class="sr-val">{{ nights }}</span>
+        </div>
+        <div class="sr">
+          <span class="sr-label">Guests</span>
+          <span class="sr-val">{{ guests }}</span>
+        </div>
+        <div class="sr">
+          <span class="sr-label">Price/night</span>
+          <span class="sr-val">৳{{ (selectedRoom?.price || hotel.price || 0) | number }}</span>
+        </div>
+      </div>
+
+      <div class="coupon-section mt-4 mb-3">
+        <label class="form-label fw-bold">Promo Code / Coupon</label>
+        <div class="d-flex gap-2">
+          <input type="text" class="form-control" [(ngModel)]="couponCode" placeholder="Enter code" [disabled]="appliedCoupon !== null">
+          <button *ngIf="!appliedCoupon" class="btn btn-dark" (click)="applyCoupon()">Apply</button>
+          <button *ngIf="appliedCoupon" class="btn btn-outline-danger" (click)="removeCoupon()">Remove</button>
+        </div>
+        <div *ngIf="couponError" class="text-danger mt-1" style="font-size: 0.9rem;">{{ couponError }}</div>
+        <div *ngIf="couponSuccess" class="text-success mt-1" style="font-size: 0.9rem;">{{ couponSuccess }}</div>
+      </div>
+
+      <div class="sr mt-3" *ngIf="discountAmount > 0" style="color: #28a745; font-weight: 500;">
+        <span class="sr-label">Discount Applied</span>
+        <span class="sr-val">- ৳{{ discountAmount | number }}</span>
+      </div>
+
+      <div class="total-box">
+        <span>Total Amount</span>
+        <span class="total-val">৳{{ total | number }}</span>
+      </div>
+
+      <div class="fac-list mt-3" *ngIf="hotel.facilities.length">
+        <div class="fac-title">Included Facilities</div>
+        <div class="facs">
+          <span class="fac" *ngFor="let f of hotel.facilities">{{ f }}</span>
+        </div>
+      </div>
+
+      <div class="guarantee-box">
+        <div>🔒 Secure Payment</div>
+        <div>✅ Free Cancellation</div>
+        <div>📞 24/7 Support</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!hotel && !loadError" class="text-center py-5">
+    <div class="spinner-border" style="color:#c9a84c;"></div>
+  </div>
+</div>

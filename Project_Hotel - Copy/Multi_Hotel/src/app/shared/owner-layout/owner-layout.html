@@ -1,0 +1,34 @@
+<div class="admin-layout" [class.sidebar-closed]="!isSidebarOpen">
+  <aside class="sidebar">
+    <div class="logo" routerLink="/" style="cursor: pointer;">Stay<span>Sphere</span> <small>Owner</small></div>
+    <nav>
+      <a routerLink="/owner/dashboard" routerLinkActive="active">📊 Overview</a>
+      <a routerLink="/owner/my-hotels" routerLinkActive="active">🏨 My Hotels</a>
+      <a routerLink="/owner/manage-rooms" routerLinkActive="active">🛏 Room Management</a>
+      <a routerLink="/owner/bookings" routerLinkActive="active">📋 Bookings</a>
+      <a routerLink="/owner/earnings" routerLinkActive="active">💰 Earnings</a>
+      <a routerLink="/profile" routerLinkActive="active">👤 Profile</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="page-header" *ngIf="pageTitle">
+      <div class="header-left">
+        <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
+        <div>
+          <h1 class="page-title">{{ pageTitle }}</h1>
+          <p class="page-sub" *ngIf="pageSub">{{ pageSub }}</p>
+        </div>
+      </div>
+      <div class="owner-info" *ngIf="owner">
+        <div class="owner-avatar" *ngIf="!owner.image">{{ owner.name[0].toUpperCase() }}</div>
+        <img [src]="owner.image" *ngIf="owner.image" class="owner-avatar-img" alt="Avatar">
+        <div>
+          <div class="owner-name">{{ owner.name }}</div>
+          <div class="owner-role">Hotel Owner</div>
+        </div>
+      </div>
+    </div>
+    <ng-content></ng-content>
+  </main>
+</div>

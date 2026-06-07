@@ -1,0 +1,83 @@
+<div class="auth-wrap">
+    <div class="auth-left">
+        <div class="auth-brand">Stay<span>Sphere</span></div>
+        <h1 class="auth-heading">Join <span class="gold">2M+ travelers</span> who love StaySphere</h1>
+        <p class="auth-desc">Create your free account and start exploring the best hotels across Bangladesh and beyond.
+        </p>
+        <div class="perks">
+            <div class="perk">✅ Free cancellation on most bookings</div>
+            <div class="perk">✅ Exclusive member-only deals</div>
+            <div class="perk">✅ 24/7 customer support</div>
+            <div class="perk">✅ Earn rewards on every booking</div>
+        </div>
+    </div>
+
+    <div class="auth-right">
+        <div class="auth-card">
+            <div class="ac-top">
+                <h2>Create Account</h2>
+                <p>Sign up and start your journey</p>
+            </div>
+
+            <div class="form-row">
+                <div class="fg">
+                    <label>Full Name *</label>
+                    <input type="text" [(ngModel)]="name" placeholder="Your full name" />
+                </div>
+                <div class="fg">
+                    <label>Phone</label>
+                    <input type="tel" [(ngModel)]="phone" placeholder="+880..." />
+                </div>
+            </div>
+
+            <div class="fg mt-3">
+                <label>Email Address *</label>
+                <input type="email" [(ngModel)]="email" placeholder="you@email.com" />
+            </div>
+
+            <div class="form-row mt-3">
+                <div class="fg">
+                    <label>Password *</label>
+                    <input type="password" [(ngModel)]="password" placeholder="Min 6 chars" />
+                </div>
+                <div class="fg">
+                    <label>Confirm Password *</label>
+                    <input type="password" [(ngModel)]="confirmPass" placeholder="Repeat password" />
+                </div>
+            </div>
+
+            <div class="fg mt-3">
+                <label>Account Type</label>
+                <div class="role-grid">
+                    <div class="role-card" [class.role-active]="role==='customer'" (click)="role='customer'">
+                        <span class="role-icon">🧳</span>
+                        <span class="role-name">Customer</span>
+                        <span class="role-desc">Book hotels</span>
+                    </div>
+                    <div class="role-card" [class.role-active]="role==='owner'" (click)="role='owner'">
+                        <span class="role-icon">🏨</span>
+                        <span class="role-name">Hotel Owner</span>
+                        <span class="role-desc">List hotels</span>
+                    </div>
+                    <div class="role-card" [class.role-active]="role==='admin'" (click)="role='admin'">
+                        <span class="role-icon">⚙</span>
+                        <span class="role-name">Admin</span>
+                        <span class="role-desc">Manage all</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="error-msg" *ngIf="error">{{ error }}</div>
+
+            <button class="auth-btn" (click)="doRegister()" [disabled]="loading">
+                <span *ngIf="!loading">Create Account →</span>
+                <span *ngIf="loading">Creating...</span>
+            </button>
+
+            <div class="auth-switch">
+                Already have an account?
+                <a routerLink="/auth/login">Sign In →</a>
+            </div>
+        </div>
+    </div>
+</div>

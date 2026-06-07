@@ -1,0 +1,316 @@
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero-wrap">
+  <div class="hero-badge">✦ Trusted by 2M+ travelers worldwide</div>
+
+  <h1 class="hero-title">
+    Discover Your <span class="gold">Perfect Stay</span> Anywhere
+  </h1>
+  <p class="hero-sub">
+    Premium hotels across Bangladesh — from budget gems to luxury escapes.
+  </p>
+
+  <!-- Search Box -->
+  <div class="search-box">
+
+    <!-- Destination -->
+    <div class="sf dest-sf" style="position: relative;">
+
+      <label>Destination</label>
+
+      <input type="text" [(ngModel)]="searchDest" placeholder="City or hotel..." (input)="filterRecentSearches()"
+        (focus)="
+        showRecentSearches = true;
+        filterRecentSearches()
+      " (blur)="hideRecentSearches()" />
+
+      <!-- Recent Search Dropdown -->
+      <div class="recent-dropdown" *ngIf="
+        showRecentSearches &&
+        filteredRecentSearches.length > 0
+      ">
+
+        <div class="rd-head">
+          Recent Searches
+        </div>
+
+        <div class="rd-list">
+
+          <div class="rd-item" *ngFor="
+            let term of filteredRecentSearches
+          " (mousedown)="selectRecent(term); $event.preventDefault(); $event.stopPropagation()">
+
+            <span class="rd-icon">
+              🕒
+            </span>
+
+            {{ term }}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Checkin -->
+    <div class="sf">
+
+      <label>Check-in</label>
+
+      <input type="date" [(ngModel)]="searchCheckin" />
+
+    </div>
+
+    <!-- Checkout -->
+    <div class="sf">
+
+      <label>Check-out</label>
+
+      <input type="date" [(ngModel)]="searchCheckout" />
+
+    </div>
+
+    <!-- Search Button -->
+    <button class="sbtn" (click)="doSearch()">
+      🔍 Search
+    </button>
+
+  </div>
+
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat"><span class="sn">50K+</span><span class="sl">Hotels Listed</span></div>
+    <div class="stat"><span class="sn">190+</span><span class="sl">Countries</span></div>
+    <div class="stat"><span class="sn">2M+</span><span class="sl">Happy Guests</span></div>
+    <div class="stat"><span class="sn">4.9★</span><span class="sl">Avg Rating</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ POPULAR HOTELS ═══════════ -->
+<div class="container my-5">
+  <div class="sec-head">
+    <div>
+      <h2 class="sec-title">Popular Hotels</h2>
+      <p class="sec-sub">Handpicked stays loved by our travelers</p>
+    </div>
+    <a routerLink="/hotels" class="see-all">See all →</a>
+  </div>
+
+  <!-- Destination Chips -->
+  <div class="chips mb-4">
+    <button *ngFor="let d of destinations" (click)="filterByDest(d)" [class.chip-active]="selectedDest === d"
+      class="chip">
+      {{ d === 'all' ? 'All' : d }}
+    </button>
+  </div>
+
+  <!-- Hotel Cards -->
+  <div class="hotel-grid">
+    <div class="hotel-card" *ngFor="let hotel of filteredHotels">
+
+      <!-- Image -->
+      <div class="hotel-img">
+        <img [src]="hotel.image" [alt]="hotel.name" *ngIf="hotel.image" class="h-img-obj">
+        <span class="h-emoji" *ngIf="!hotel.image">{{ hotel.emoji }}</span>
+        <span class="deal-badge" *ngIf="hotel.deal">🔥 Hot Deal</span>
+        <button class="wish-btn" (click)="toggleWish($event, hotel)">
+          <i class="fa-heart" [class.fas]="inWish(hotel.id!)" [class.far]="!inWish(hotel.id!)" [class.active]="inWish(hotel.id!)"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="hotel-body">
+        <h5 class="h-name">{{ hotel.name }}</h5>
+        <p class="h-loc">📍 {{ hotel.location }}</p>
+        <div class="h-stars">
+          {{ getStars(hotel.rating) }}
+          <span class="h-rating-num">{{ hotel.rating }}</span>
+        </div>
+
+        <div class="fac-list">
+          <span class="fac" *ngFor="let f of hotel.facilities.slice(0,3)">{{ f }}</span>
+          <span class="fac" *ngIf="hotel.facilities.length > 3">
+            +{{ hotel.facilities.length - 3 }}
+          </span>
+        </div>
+
+        <div class="h-footer">
+          <div class="h-price">
+            <span class="price-amt">৳{{ hotel.price | number }}</span>
+            <span class="price-per">/night</span>
+          </div>
+          <div class="h-right">
+            <span class="r-badge">{{ hotel.rating }}</span>
+            <button class="book-btn" (click)="openBooking(hotel)">Book Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ROOM TYPES ═══════════ -->
+<section class="room-section">
+  <div class="container">
+    <h2 class="sec-title mb-4">Browse by Room Type</h2>
+    <div class="room-grid">
+      <div class="room-card" *ngFor="let r of roomTypes" routerLink="/hotels">
+        <div class="room-icon">{{ r.emoji }}</div>
+        <div class="room-type">{{ r.type }}</div>
+        <div class="room-desc">{{ r.desc }}</div>
+        <div class="room-price">From {{ r.price }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DEAL BANNER ═══════════ -->
+<div class="container my-5">
+  <div class="deal-banner">
+    <div>
+      <span class="deal-tag">LIMITED TIME</span>
+      <h3 class="text-white mt-2 mb-1">Summer Escapes 2025</h3>
+      <p style="color:rgba(255,255,255,0.6); margin:0;">
+        Book 3+ nights and save big. Use code <strong class="gold">STAYHUB10</strong>
+      </p>
+    </div>
+    <a routerLink="/deals" class="deal-btn">Claim Deal →</a>
+  </div>
+</div>
+
+<!-- ═══════════ REVIEWS ═══════════ -->
+<div class="container mb-5">
+  <h2 class="sec-title mb-4">What Guests Say</h2>
+  <div class="review-grid">
+    <div class="review-card" *ngFor="let r of reviews">
+      <div class="rv-top">
+        <div class="rv-avatar">{{ r.avatar }}</div>
+        <div>
+          <div class="rv-name">{{ r.name }}</div>
+          <div class="rv-loc">📍 {{ r.loc }}</div>
+        </div>
+        <div class="rv-stars ms-auto">{{ getStars(r.rating) }}</div>
+      </div>
+      <p class="rv-text">"{{ r.text }}"</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ BOOKING MODAL ═══════════ -->
+<div class="modal-overlay" *ngIf="showBookingModal" (click)="showBookingModal=false">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="showBookingModal=false">×</button>
+    <h2 class="modal-title">Complete Booking</h2>
+
+    <div class="booking-summary" *ngIf="selectedHotel">
+      <div class="bs-row"><span>{{ selectedHotel.emoji }} {{ selectedHotel.name }}</span></div>
+      <div class="bs-row"><span>📍</span><span>{{ selectedHotel.location }}</span></div>
+      <div class="bs-row"><span>🛏</span><span>{{ selectedHotel.type }}</span></div>
+      <div class="bs-row"><span>💰</span><span>৳{{ selectedHotel.price | number }}/night</span></div>
+    </div>
+
+    <div class="form-row">
+      <div class="fg">
+        <label>Check-in</label>
+        <input type="date" [(ngModel)]="bkCheckin" (change)="calcTotal()" />
+      </div>
+      <div class="fg">
+        <label>Check-out</label>
+        <input type="date" [(ngModel)]="bkCheckout" (change)="calcTotal()" />
+      </div>
+    </div>
+
+    <div class="fg mt-2">
+      <label>Guests</label>
+      <select [(ngModel)]="bkGuests">
+        <option>1 Guest</option>
+        <option>2 Guests</option>
+        <option>3 Guests</option>
+        <option>4 Guests</option>
+      </select>
+    </div>
+
+    <div class="fg mt-2">
+      <label>Special Requests (optional)</label>
+      <textarea [(ngModel)]="bkRequests" rows="2" placeholder="Any requirements..."></textarea>
+    </div>
+
+    <div class="total-row" *ngIf="bookingTotal > 0">
+      {{ bookingNights }} night(s) × ৳{{ selectedHotel?.price | number }} =
+      <strong>৳{{ bookingTotal | number }}</strong>
+    </div>
+
+    <button class="modal-btn" (click)="confirmBooking()">Confirm & Pay</button>
+  </div>
+</div>
+
+<!-- ═══════════ LOGIN MODAL ═══════════ -->
+<div class="modal-overlay" *ngIf="showLoginModal" (click)="showLoginModal=false">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="showLoginModal=false">×</button>
+    <h2 class="modal-title">Welcome Back</h2>
+
+    <div class="fg">
+      <label>Email Address</label>
+      <input type="email" [(ngModel)]="loginEmail" placeholder="you@email.com" />
+    </div>
+    <div class="fg mt-2">
+      <label>Password</label>
+      <input type="password" [(ngModel)]="loginPass" placeholder="••••••••" />
+    </div>
+    <p *ngIf="loginError" style="color:red; font-size:0.85rem; margin-top:0.5rem;">{{ loginError }}</p>
+
+    <button class="modal-btn mt-3" (click)="showLoginModal = false; doLogin()">
+
+      Sign In
+
+    </button>
+    <p class="switch-text">
+      No account?
+      <a (click)="showLoginModal=false; showRegisterModal=true">Create one →</a>
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════ REGISTER MODAL ═══════════ -->
+<div class="modal-overlay" *ngIf="showRegisterModal" (click)="showRegisterModal=false">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="showRegisterModal=false">×</button>
+    <h2 class="modal-title">Create Account</h2>
+
+    <div class="form-row">
+      <div class="fg">
+        <label>Full Name *</label>
+        <input type="text" [(ngModel)]="regName" placeholder="Your name" />
+      </div>
+      <div class="fg">
+        <label>Phone</label>
+        <input type="tel" [(ngModel)]="regPhone" placeholder="+880..." />
+      </div>
+    </div>
+    <div class="fg mt-2">
+      <label>Email *</label>
+      <input type="email" [(ngModel)]="regEmail" placeholder="you@email.com" />
+    </div>
+    <div class="fg mt-2">
+      <label>Password *</label>
+      <input type="password" [(ngModel)]="regPass" placeholder="Min 6 chars" />
+    </div>
+    <div class="fg mt-2">
+      <label>Account Type</label>
+      <select [(ngModel)]="regRole">
+        <option value="customer">Customer</option>
+        <option value="owner">Hotel Owner</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+    <p *ngIf="regError" style="color:red; font-size:0.85rem; margin-top:0.5rem;">{{ regError }}</p>
+    <button class="modal-btn mt-3" (click)="doRegister()">Create Account</button>
+    <p class="switch-text">
+      Already have one?
+      <a (click)="showRegisterModal=false; showLoginModal=true">Sign In →</a>
+    </p>
+  </div>
+</div>

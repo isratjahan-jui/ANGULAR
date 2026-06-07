@@ -1,0 +1,35 @@
+<div class="admin-layout" [class.sidebar-closed]="!isSidebarOpen">
+  <aside class="sidebar">
+    <div class="logo" routerLink="/" style="cursor: pointer;">Stay<span>Sphere</span> <small>Traveler</small></div>
+    <nav>
+      <a routerLink="/customer/dashboard" routerLinkActive="active">📊 Overview</a>
+      <a routerLink="/customer/my-bookings" routerLinkActive="active">📅 My Bookings</a>
+      <a routerLink="/customer/check-in" routerLinkActive="active">🏨 Check-in Today</a>
+      <a routerLink="/customer/check-out" routerLinkActive="active">👋 Check-out Today</a>
+      <a routerLink="/customer/wishlist" routerLinkActive="active">❤️ Wishlist</a>
+      <a routerLink="/profile" routerLinkActive="active">👤 Profile</a>
+      <a (click)="logout()" class="logout-link">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="page-header" *ngIf="pageTitle">
+      <div class="header-left">
+        <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
+        <div>
+          <h1 class="page-title">{{ pageTitle }}</h1>
+          <p class="page-sub" *ngIf="pageSub">{{ pageSub }}</p>
+        </div>
+      </div>
+      <div class="user-info" *ngIf="user">
+        <div class="user-avatar" *ngIf="!user.image">{{ user.name[0].toUpperCase() }}</div>
+        <img [src]="user.image" *ngIf="user.image" class="user-avatar-img" alt="Avatar">
+        <div>
+          <div class="user-name">{{ user.name }}</div>
+          <div class="user-role">Traveler</div>
+        </div>
+      </div>
+    </div>
+    <ng-content></ng-content>
+  </main>
+</div>

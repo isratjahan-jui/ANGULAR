@@ -1,0 +1,82 @@
+<div class="payment-container">
+  <div class="checkout-card" *ngIf="!paymentSuccess">
+    <div class="left-panel">
+      <h2>Complete Your Booking</h2>
+      <p>Select your preferred payment method to secure your stay at <strong>{{bookingData?.hotelName}}</strong>.</p>
+      
+      <div class="methods-grid">
+        <div class="method-card" 
+             *ngFor="let m of paymentMethods" 
+             [class.selected]="selectedMethod === m.id"
+             (click)="selectMethod(m.id)">
+          <div class="method-icon">{{m.icon}}</div>
+          <div class="method-name">{{m.name}}</div>
+          <div class="check-mark" *ngIf="selectedMethod === m.id">✓</div>
+        </div>
+      </div>
+
+      <div class="payment-form" *ngIf="selectedMethod">
+        <div class="simulated-inputs" *ngIf="selectedMethod === 'card'">
+          <input type="text" placeholder="Card Number">
+          <div class="row">
+            <input type="text" placeholder="MM/YY">
+            <input type="text" placeholder="CVV">
+          </div>
+        </div>
+        <div class="simulated-inputs" *ngIf="['bkash', 'nagad', 'rocket'].includes(selectedMethod)">
+          <p>Please enter your {{selectedMethod}} number</p>
+          <input type="text" [placeholder]="selectedMethod.toUpperCase() + ' Account Number'">
+        </div>
+        
+        <p class="error-msg" *ngIf="error">{{ error }}</p>
+        <button class="pay-btn" [disabled]="isProcessing" (click)="processPayment()">
+          <span *ngIf="!isProcessing">Pay ৳{{bookingData?.totalPrice}}</span>
+          <span *ngIf="isProcessing">Processing...</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <h3>Booking Summary</h3>
+      <div class="summary-details">
+        <div class="summary-item">
+          <label>Hotel</label>
+          <span>{{bookingData?.hotelName}}</span>
+        </div>
+        <div class="summary-item">
+          <label>Room</label>
+          <span>{{bookingData?.roomType}}</span>
+        </div>
+        <div class="summary-item">
+          <label>Dates</label>
+          <span>{{bookingData?.checkIn}} to {{bookingData?.checkOut}}</span>
+        </div>
+        <div class="summary-item">
+          <label>Nights</label>
+          <span>{{bookingData?.nights}}</span>
+        </div>
+        <hr>
+        <div class="summary-total">
+          <label>Total Amount</label>
+          <span>৳{{bookingData?.totalPrice}}</span>
+        </div>
+      </div>
+      <div class="security-info">
+        <i class="fas fa-shield-alt"></i> 100% Secure Payment
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Screen -->
+  <div class="success-screen" *ngIf="paymentSuccess">
+    <div class="success-card">
+      <div class="success-icon">🎉</div>
+      <h1>Booking Successful!</h1>
+      <p>Your payment has been processed and your booking is confirmed.</p>
+      <div class="success-actions">
+        <button class="btn-primary" (click)="goToDashboard()">View My Bookings</button>
+        <button class="btn-secondary" type="button" (click)="goHome()">Back to Home</button>
+      </div>
+    </div>
+  </div>
+</div>
