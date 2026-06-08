@@ -1,0 +1,59 @@
+<app-owner-layout
+  [pageTitle]="'Welcome back, ' + (ownerName || 'Owner') + '!'"
+  pageSub="Manage your hotel properties and track earnings">
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="mc-icon" style="color: #d6336c;">💰</div>
+      <div class="mc-val">৳{{ totalEarnings }}</div>
+      <div class="mc-label">Total Earnings</div>
+    </div>
+    <div class="metric-card">
+      <div class="mc-icon" style="color: #1c7ed6;">📅</div>
+      <div class="mc-val">{{ totalBookings }}</div>
+      <div class="mc-label">Total Bookings</div>
+    </div>
+    <div class="metric-card">
+      <div class="mc-icon" style="color: #f08c00;">📊</div>
+      <div class="mc-val">৳{{ monthlyIncome }}</div>
+      <div class="mc-label">Monthly Income</div>
+    </div>
+    <div class="metric-card">
+      <div class="mc-icon" style="color: #2b8a3e;">👥</div>
+      <div class="mc-val">{{ activeGuests }}</div>
+      <div class="mc-label">Active Guests</div>
+    </div>
+  </div>
+
+  <section class="dashboard-sections">
+    <div class="section-card">
+      <h3>My Hotels</h3>
+      <div class="hotel-list">
+        <div class="hotel-item" *ngFor="let h of myHotels">
+          <div class="hotel-preview">
+            <img [src]="h.image || 'https://via.placeholder.com/100'" alt="Hotel">
+            <div class="badge" *ngIf="!h.approved">Pending Approval</div>
+          </div>
+          <div class="hotel-details">
+            <h4>{{ h.name }}</h4>
+            <p>{{ h.location }}</p>
+          </div>
+          <button class="btn-manage" routerLink="/owner/manage-rooms">Manage</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>Recent Activity</h3>
+      <div class="recent-list">
+        <div class="activity-item" *ngFor="let b of myBookings | slice:0:5">
+          <div class="activity-info">
+            <strong>{{ b.roomType }}</strong> booked by Guest {{ b.userId }}
+            <p>{{ b.createdAt | date:'short' }}</p>
+          </div>
+          <div class="activity-status" [ngClass]="b.status.toLowerCase()">{{ b.status }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</app-owner-layout>

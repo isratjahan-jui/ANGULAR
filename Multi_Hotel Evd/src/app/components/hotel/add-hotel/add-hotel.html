@@ -1,0 +1,253 @@
+<div class="page-hero">
+  <h1>Add New Hotel</h1>
+  <p>List your property on StaySphere</p>
+</div>
+
+<div class="ah-container">
+
+  <!-- SUCCESS -->
+  <div class="success-banner" *ngIf="success">
+    <span class="sb-icon">✅</span>
+    <div>
+      <strong>Hotel submitted successfully!</strong>
+      <p>Awaiting admin approval. Redirecting...</p>
+    </div>
+  </div>
+
+  <div class="form-grid">
+
+    <!-- ══ LEFT COLUMN ══ -->
+    <div class="left-col">
+
+      <!-- Basic Info -->
+      <div class="form-card">
+        <div class="fc-header">
+          <span class="fc-icon">📋</span>
+          <h3>Basic Information</h3>
+        </div>
+
+        <div class="fg">
+          <label>Hotel Name <span class="req">*</span></label>
+          <input type="text" [(ngModel)]="name"
+                 placeholder="e.g. Grand Palace Hotel"
+                 [class.input-error]="error && !name" />
+        </div>
+
+        <div class="form-row mt-3">
+          <div class="fg">
+            <label>Location <span class="req">*</span></label>
+            <select [(ngModel)]="location"
+                    [class.input-error]="error && !location">
+              <option value="">Select location...</option>
+              <option *ngFor="let l of locations" [value]="l">
+                {{ emojiMap[l] }} {{ l }}
+              </option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Room Type</label>
+            <select [(ngModel)]="type">
+              <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="fg mt-3">
+          <label>Description <span class="req">*</span></label>
+          <textarea [(ngModel)]="description" rows="4"
+                    placeholder="Describe your hotel — location, ambiance, unique features, nearby attractions..."
+                    [class.input-error]="error && !description">
+          </textarea>
+          <span class="char-count">{{ description.length }} / 500</span>
+        </div>
+      </div>
+
+      <!-- Pricing & Facilities -->
+      <div class="form-card mt-3">
+        <div class="fc-header">
+          <span class="fc-icon">💰</span>
+          <h3>Pricing & Facilities</h3>
+        </div>
+
+        <div class="fg">
+          <label>Price per Night (৳) <span class="req">*</span></label>
+          <div class="price-input-wrap">
+            <span class="currency">৳</span>
+            <input type="number" [(ngModel)]="price"
+                   placeholder="e.g. 5000" min="0"
+                   [class.input-error]="error && (!price || price <= 0)" />
+          </div>
+          <span class="hint">Guests will see this as the base rate</span>
+        </div>
+
+        <div class="fg mt-3">
+          <label>Facilities</label>
+          <input type="text" [(ngModel)]="facilitiesInput"
+                 placeholder="WiFi, Pool, Parking, Gym, Spa, Restaurant" />
+          <span class="hint">Separate each facility with a comma</span>
+        </div>
+
+        <!-- Facility Preview Tags -->
+        <div class="fac-tags" *ngIf="facilitiesInput">
+          <span class="fac-tag"
+                *ngFor="let f of facilitiesInput.split(',')">
+            {{ f.trim() }}
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ RIGHT COLUMN ══ -->
+    <div class="right-col">
+
+      <!-- Image Upload -->
+      <div class="form-card">
+        <div class="fc-header">
+          <span class="fc-icon">📸</span>
+          <h3>Hotel Images</h3>
+          <span class="img-count" *ngIf="allImages.length > 0">
+            {{ allImages.length }} image(s)
+          </span>
+        </div>
+
+        <!-- Main Preview -->
+        <div class="main-preview" *ngIf="mainImagePreview">
+          <img [src]="mainImagePreview" alt="Main hotel image" />
+          <div class="preview-label">⭐ Main Image</div>
+        </div>
+        <div class="no-image-box" *ngIf="!mainImagePreview">
+          <span>🏨</span>
+          <p>No image selected yet</p>
+          <small>Upload or add a URL below</small>
+        </div>
+
+        <!-- Upload Methods -->
+        <div class="upload-methods">
+
+          <!-- File Upload -->
+          <div class="upload-method">
+            <div class="um-label">📁 From Device</div>
+            <label class="file-drop">
+              <input type="file"
+                     accept="image/jpeg,image/png,image/webp,image/jpg"
+                     multiple
+                     (change)="onImageSelect($event)" />
+              <div class="fd-inner">
+                <span class="fd-icon">⬆</span>
+                <span class="fd-text">Click to upload</span>
+                <span class="fd-hint">JPG, PNG, WEBP · Max 5MB</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- URL Input -->
+          <div class="upload-method">
+            <div class="um-label">🔗 From URL</div>
+            <div class="url-row">
+              <input type="text"
+                     [(ngModel)]="newImageUrl"
+                     placeholder="https://example.com/image.jpg"
+                     (keyup.enter)="addImageUrl()" />
+              <button type="button" class="url-add-btn"
+                      (click)="addImageUrl()">
+                Add
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="thumbs-wrap" *ngIf="allImages.length > 0">
+          <p class="thumbs-label">
+            💡 Click thumbnail to set as main image
+          </p>
+          <div class="thumbs-grid">
+
+            <!-- File images -->
+            <div class="thumb"
+                 *ngFor="let img of selectedImages; let i = index"
+                 [class.thumb-active]="img === mainImagePreview"
+                 (click)="setMainImage(img)">
+              <img [src]="img" alt="preview" />
+              <button class="thumb-del"
+                      (click)="$event.stopPropagation(); removeImage(i, 'file')">
+                ×
+              </button>
+              <div class="thumb-main-badge"
+                   *ngIf="img === mainImagePreview">Main</div>
+              <div class="thumb-src-badge">File</div>
+            </div>
+
+            <!-- URL images -->
+            <div class="thumb"
+                 *ngFor="let img of imageUrls; let i = index"
+                 [class.thumb-active]="img === mainImagePreview"
+                 (click)="setMainImage(img)">
+              <img [src]="img" alt="preview"
+                   onerror="this.src='https://via.placeholder.com/100x80?text=Error'" />
+              <button class="thumb-del"
+                      (click)="$event.stopPropagation(); removeImage(i, 'url')">
+                ×
+              </button>
+              <div class="thumb-main-badge"
+                   *ngIf="img === mainImagePreview">Main</div>
+              <div class="thumb-src-badge">URL</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="form-card mt-3">
+        <div class="fc-header">
+          <span class="fc-icon">🎥</span>
+          <h3>Hotel Tour Video</h3>
+          <span class="optional-badge">Optional</span>
+        </div>
+
+        <div class="fg">
+          <label>YouTube URL</label>
+          <input type="text"
+                 [(ngModel)]="videoUrl"
+                 placeholder="https://www.youtube.com/watch?v=..." />
+          <span class="hint">Paste a YouTube link to showcase your hotel</span>
+        </div>
+
+        <!-- Video Preview -->
+        <div class="video-preview" *ngIf="videoUrl && isValidVideoUrl()">
+          <iframe [src]="getEmbedUrl(videoUrl)"
+                  frameborder="0"
+                  allowfullscreen
+                  loading="lazy">
+          </iframe>
+        </div>
+        <div class="video-invalid"
+             *ngIf="videoUrl && !isValidVideoUrl()">
+          ⚠ Please enter a valid YouTube URL
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-msg" *ngIf="error">
+    <span>⚠</span> {{ error }}
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="form-actions">
+    <a routerLink="/owner/my-hotels" class="cancel-btn">← Cancel</a>
+    <button class="submit-btn"
+            (click)="submit()"
+            [disabled]="loading || success">
+      <span *ngIf="!loading && !success">Submit for Approval →</span>
+      <span *ngIf="loading">Submitting...</span>
+      <span *ngIf="success">✅ Submitted!</span>
+    </button>
+  </div>
+
+</div>

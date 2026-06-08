@@ -1,0 +1,87 @@
+<app-owner-layout
+  pageTitle="My Hotels"
+  pageSub="Manage your properties and submit new listings">
+
+  <div class="page-toolbar">
+    <button class="btn-gold" type="button" (click)="showAddModal = true">+ Add New Hotel</button>
+  </div>
+
+  <div class="table-card">
+    <div class="tc-head">
+      <h3>Managed Properties ({{ hotels.length }})</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Hotel</th><th>Location</th><th>Type</th><th>Price</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let h of hotels">
+            <td><strong>{{ h.emoji }} {{ h.name }}</strong></td>
+            <td>{{ h.location }}</td>
+            <td>{{ h.type }}</td>
+            <td>৳{{ h.price | number }}</td>
+            <td>
+              <span class="status-badge"
+                    [class.s-confirmed]="h.approved"
+                    [class.s-pending]="!h.approved">
+                {{ h.approved ? 'Approved' : 'Pending Admin Approval' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-gold" type="button" (click)="deleteHotel(h.id!)" style="background:#fee2e2; color:#991b1b; padding:0.3rem 0.7rem;">🗑</button>
+            </td>
+          </tr>
+          <tr *ngIf="hotels.length === 0">
+            <td colspan="6" class="empty-row">You haven't added any hotels yet.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-owner-layout>
+
+<div class="modal-overlay" *ngIf="showAddModal" (click)="showAddModal = false">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <button class="modal-close" type="button" (click)="showAddModal = false">×</button>
+    <h2 class="font-serif mb-4">Add New Property</h2>
+
+    <div class="form-group mb-3">
+      <label>Hotel Name</label>
+      <input type="text" [(ngModel)]="newHotel.name" placeholder="Grand Stay...">
+    </div>
+
+    <div class="form-group mb-3">
+      <label>Location</label>
+      <input type="text" [(ngModel)]="newHotel.location" placeholder="City, Area...">
+    </div>
+
+    <div class="form-row mb-3">
+      <div class="form-group">
+        <label>Room Type</label>
+        <select [(ngModel)]="newHotel.type">
+          <option>Standard</option>
+          <option>Deluxe</option>
+          <option>Suite</option>
+          <option>Presidential</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Price per Night (৳)</label>
+        <input type="number" [(ngModel)]="newHotel.price">
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label>Description</label>
+      <textarea [(ngModel)]="newHotel.description" rows="3"></textarea>
+    </div>
+
+    <div class="form-group mb-3">
+      <label>Emoji Icon</label>
+      <input type="text" [(ngModel)]="newHotel.emoji" placeholder="🏨, 🌴, 🏙">
+    </div>
+
+    <button class="btn-gold w-100 mt-3" type="button" (click)="addHotel()">Submit for Approval</button>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="hotel-list-container">
+  <aside class="filter-sidebar">
+    <h3>Filters</h3>
+    
+    <div class="filter-group">
+      <label>Search</label>
+      <input type="text" [(ngModel)]="searchQuery" (input)="applyFilters()" placeholder="Hotel name or city...">
+    </div>
+
+    <div class="filter-group">
+      <label>Location</label>
+      <select [(ngModel)]="selectedLocation" (change)="applyFilters()">
+        <option value="">All Locations</option>
+        <option *ngFor="let loc of locations" [value]="loc">{{loc}}</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Max Price (৳{{maxPrice}})</label>
+      <input type="range" [(ngModel)]="maxPrice" min="1000" max="25000" step="500" (input)="applyFilters()">
+    </div>
+
+    <div class="filter-group">
+      <label>Min Rating ({{minRating}}+ Stars)</label>
+      <input type="range" [(ngModel)]="minRating" min="0" max="5" step="1" (input)="applyFilters()">
+    </div>
+
+    <div class="filter-group">
+      <label>Special</label>
+      <div class="facilities-check">
+        <label>
+          <input type="checkbox" [(ngModel)]="showOnlyDeals" (change)="applyFilters()"> Hot Deals Only
+        </label>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label>Facilities</label>
+      <div class="facilities-check">
+        <label *ngFor="let f of facilitiesList">
+          <input type="checkbox" (change)="toggleFacility(f)"> {{f}}
+        </label>
+      </div>
+    </div>
+  </aside>
+
+  <main class="results-area">
+    <header class="results-header">
+      <h2>Showing {{filteredHotels.length}} Hotels</h2>
+      <div class="sort-options">
+        <span>Sort by: </span>
+        <select>
+          <option>Price (Low to High)</option>
+          <option>Price (High to Low)</option>
+          <option>Rating</option>
+        </select>
+      </div>
+    </header>
+
+    <div class="hotels-grid">
+      <div class="hotel-card" *ngFor="let h of filteredHotels" [routerLink]="['/hotel', h.id]">
+        <div class="hotel-img">
+          <img [src]="h.image || 'https://via.placeholder.com/300x200'" alt="Hotel">
+          <div class="price-tag">৳{{h.price}}</div>
+          <button class="wishlist-btn" (click)="toggleWishlist($event, h)">
+            <i class="fa-heart" [class.fas]="isInWishlist(h.id)" [class.far]="!isInWishlist(h.id)" [class.active]="isInWishlist(h.id)"></i>
+          </button>
+        </div>
+        <div class="hotel-info">
+          <h3>{{h.name}}</h3>
+          <p class="loc"><i class="fas fa-map-marker-alt"></i> {{h.location}}</p>
+          <div class="rating">
+            <span class="stars">{{getStars(h.rating)}}</span>
+            <span class="score">{{h.rating}}</span>
+          </div>
+          <div class="tags">
+            <span class="tag" *ngFor="let f of h.facilities | slice:0:3">{{f}}</span>
+          </div>
+          <button class="btn-view">View Details</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-results" *ngIf="filteredHotels.length === 0">
+      <div class="icon">🔍</div>
+      <h3>No hotels match your criteria</h3>
+      <p>Try adjusting your filters to see more results.</p>
+    </div>
+  </main>
+</div>

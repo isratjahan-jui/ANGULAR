@@ -1,0 +1,72 @@
+<div class="admin-layout" [class.sidebar-open]="isSidebarOpen">
+  <div class="sidebar-overlay" (click)="toggleSidebar()"></div>
+  <aside class="admin-sidebar">
+    <div class="sb-brand">Stay<span>Sphere</span> Admin</div>
+    <nav class="sb-nav">
+      <a routerLink="/admin/dashboard" routerLinkActive="sb-active active" class="sb-link" (click)="isSidebarOpen = false"><i class="fas fa-chart-pie"></i> Dashboard</a>
+      <a routerLink="/admin/manage-users" routerLinkActive="sb-active active" class="sb-link" (click)="isSidebarOpen = false"><i class="fas fa-users"></i> Manage Users</a>
+      <a routerLink="/admin/manage-hotels" routerLinkActive="sb-active active" class="sb-link" (click)="isSidebarOpen = false"><i class="fas fa-hotel"></i> Manage Hotels</a>
+      <a routerLink="/admin/coupons" routerLinkActive="sb-active active" class="sb-link" (click)="isSidebarOpen = false"><i class="fas fa-ticket-alt"></i> Manage Coupons</a>
+      <a routerLink="/admin/reports" routerLinkActive="sb-active active" class="sb-link" (click)="isSidebarOpen = false"><i class="fas fa-chart-line"></i> Reports</a>
+      <a routerLink="/admin/commission" routerLinkActive="sb-active active" class="sb-link" (click)="isSidebarOpen = false"><i class="fas fa-money-bill-wave"></i> Commission</a>
+      <a routerLink="/admin/transactions" routerLinkActive="sb-active active" class="sb-link" (click)="isSidebarOpen = false"><i class="fas fa-credit-card"></i> Transactions</a>
+      <a routerLink="/admin/invoices" routerLinkActive="sb-active active" class="sb-link" (click)="isSidebarOpen = false"><i class="fas fa-file-invoice"></i> Invoices</a>
+      <a routerLink="/profile" routerLinkActive="sb-active active" class="sb-link" (click)="isSidebarOpen = false"><i class="fas fa-user"></i> Profile</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-header" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+      <button class="sb-hamburger" (click)="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="title-group">
+        <h1 class="page-title m-0">Add New Coupon</h1>
+      </div>
+    </header>
+
+  <div class="card shadow-sm p-4" style="max-width: 600px; border-radius: 12px; border: 1px solid #e5e0d5;">
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+    <form (ngSubmit)="save()">
+      <div class="mb-3">
+        <label class="form-label fw-bold">Coupon Code</label>
+        <input type="text" class="form-control" [(ngModel)]="coupon.code" name="code" placeholder="e.g. SUMMER2026" required>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Discount Type</label>
+          <select class="form-select" [(ngModel)]="coupon.discountType" name="discountType">
+            <option value="percentage">Percentage (%)</option>
+            <option value="fixed">Fixed Amount (৳)</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Discount Value</label>
+          <input type="number" class="form-control" [(ngModel)]="coupon.discountAmount" name="discountAmount" required min="1">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-bold">Valid Until</label>
+        <input type="date" class="form-control" [(ngModel)]="coupon.validUntil" name="validUntil" required>
+      </div>
+
+      <div class="form-check mb-4">
+        <input class="form-check-input" type="checkbox" [(ngModel)]="coupon.isActive" name="isActive" id="isActiveCheck">
+        <label class="form-check-label" for="isActiveCheck">
+          Active
+        </label>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary px-4 py-2" [disabled]="loading" style="background:#c9a84c; border:none; color:#0a1628; font-weight:600;">
+          {{ loading ? 'Saving...' : 'Save Coupon' }}
+        </button>
+        <a routerLink="/admin/coupons" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+      </div>
+    </form>
+  </div>
+  </main>
+</div>

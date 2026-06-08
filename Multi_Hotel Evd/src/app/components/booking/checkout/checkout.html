@@ -1,0 +1,36 @@
+<app-customer-layout
+  pageTitle="Today's Check-outs"
+  [pageSub]="today">
+
+  <div *ngIf="loading" class="text-center py-4">
+    <div class="spinner-border" style="color:#c9a84c;"></div>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <div *ngIf="bookings.length === 0" class="empty-state">
+      <div class="es-icon">👋</div>
+      <h3>No check-outs today</h3>
+      <p>No bookings checking out today.</p>
+    </div>
+
+    <div class="booking-cards" *ngIf="bookings.length > 0">
+      <div class="checkin-card" *ngFor="let b of bookings">
+        <div class="cc-emoji">{{ b.hotelEmoji }}</div>
+        <div class="cc-info">
+          <h4>{{ b.hotelName }}</h4>
+          <p>📍 {{ b.hotelLocation }}</p>
+          <div class="cc-row">
+            <span>🗓 {{ b.checkIn }} → {{ b.checkOut }}</span>
+            <span>🌙 {{ b.nights }} nights</span>
+            <span>👥 {{ b.guests }}</span>
+          </div>
+        </div>
+        <div class="cc-right">
+          <div class="cc-price">৳{{ b.totalPrice | number }}</div>
+          <span class="status-badge s-checkout">Check-out Today</span>
+          <button type="button" class="es-btn mt-2" (click)="processCheckout(b.id)">Check Out Now</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</app-customer-layout>

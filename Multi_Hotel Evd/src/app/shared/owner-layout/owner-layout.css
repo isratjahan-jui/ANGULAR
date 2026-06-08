@@ -1,0 +1,194 @@
+.admin-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  background: #f8f4ed;
+  transition: grid-template-columns 0.3s ease;
+}
+
+.admin-layout.sidebar-closed {
+  grid-template-columns: 0 1fr;
+}
+
+.sidebar {
+  background: #0a1628;
+  padding: 1.8rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.admin-layout.sidebar-closed .sidebar {
+  padding-left: 0;
+  padding-right: 0;
+  opacity: 0;
+}
+
+.logo {
+  font-family: 'Georgia', serif;
+  font-size: 1.35rem;
+  color: #c9a84c;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.logo span { color: rgba(255,255,255,0.75); }
+
+.logo small {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.4);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.68rem 0.9rem;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.65);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sidebar nav a:hover {
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+.sidebar nav a.active {
+  background: rgba(201,168,76,0.18);
+  color: #c9a84c;
+  font-weight: 600;
+}
+
+.logout-link {
+  margin-top: auto;
+  color: rgba(255,100,100,0.8) !important;
+}
+
+.logout-link:hover {
+  background: rgba(229,57,53,0.12) !important;
+  color: #ff6b6b !important;
+}
+
+.content {
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.8rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-title {
+  font-family: 'Georgia', serif;
+  font-size: 1.7rem;
+  color: #0a1628;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.page-sub {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #0a1628;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.toggle-btn:hover {
+  background: rgba(10, 22, 40, 0.05);
+  color: #c9a84c;
+}
+
+.owner-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: white;
+  border: 1px solid #e5e0d5;
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+}
+
+.owner-avatar, .owner-avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #0a1628;
+  color: #c9a84c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Georgia', serif;
+  font-weight: 700;
+  font-size: 1rem;
+  object-fit: cover;
+}
+
+.owner-name {
+  font-weight: 600;
+  color: #0a1628;
+  font-size: 0.9rem;
+}
+
+.owner-role {
+  font-size: 0.75rem;
+  color: #c9a84c;
+}
+
+@media (max-width: 900px) {
+  .admin-layout { grid-template-columns: 1fr; }
+  .sidebar {
+    position: relative;
+    height: auto;
+  }
+}

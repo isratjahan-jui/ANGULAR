@@ -1,0 +1,90 @@
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.metric-card {
+  background: white;
+  border: 1px solid #e5e0d5;
+  border-radius: 16px;
+  padding: 1.4rem;
+}
+
+.mc-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.mc-val {
+  font-family: 'Georgia', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0a1628;
+}
+.mc-label { font-size: 0.8rem; color: #6b7280; margin-top: 0.2rem; }
+
+.table-card {
+  background: white;
+  border: 1px solid #e5e0d5;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.tc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e5e0d5;
+}
+
+.tc-head h3 {
+  margin: 0;
+  font-family: 'Georgia', serif;
+  color: #0a1628;
+}
+
+.see-all {
+  color: #c9a84c;
+  font-size: 0.9rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.table-wrap { overflow-x: auto; }
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.85rem 1.25rem;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.data-table th {
+  background: #f8f4ed;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.data-table tbody tr { border-top: 1px solid #e5e0d5; }
+
+.status-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.s-confirmed { background: #d1fae5; color: #065f46; }
+.s-pending { background: #fef3c7; color: #92400e; }
+.s-cancelled { background: #fee2e2; color: #991b1b; }
+
+.empty-row { text-align: center; color: #6b7280; }
+.gold { color: #c9a84c; font-weight: 600; }
+
+@media (max-width: 768px) {
+  .metrics-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,52 @@
+<app-customer-layout *ngIf="user?.role === 'customer'" pageTitle="My Profile" pageSub="Manage your personal information">
+  <ng-container *ngTemplateOutlet="profileTpl"></ng-container>
+</app-customer-layout>
+
+<app-owner-layout *ngIf="user?.role === 'owner'" pageTitle="My Profile" pageSub="Manage your property owner account">
+  <ng-container *ngTemplateOutlet="profileTpl"></ng-container>
+</app-owner-layout>
+
+<div *ngIf="user?.role !== 'customer' && user?.role !== 'owner'">
+  <ng-container *ngTemplateOutlet="profileTpl"></ng-container>
+</div>
+
+<ng-template #profileTpl>
+  <div class="profile-container">
+    <div class="card border-0 shadow-sm p-4" style="border-radius:16px; background: white;">
+      <div class="text-center mb-4">
+        <div class="p-avatar-wrap">
+          <div class="p-avatar mx-auto" *ngIf="!previewImage">{{ user?.name?.[0]?.toUpperCase() }}</div>
+          <img [src]="previewImage" *ngIf="previewImage" class="p-avatar-img mx-auto" alt="Profile">
+          <label for="p-upload" class="p-upload-btn">
+            <i class="fas fa-camera"></i>
+          </label>
+          <input type="file" id="p-upload" (change)="onFileSelected($event)" hidden accept="image/*" />
+        </div>
+        <h4 class="mt-2" style="font-family:'Georgia',serif; color:#0a1628;">{{ user?.name }}</h4>
+        <span class="badge" style="background:#0a1628; color:#c9a84c; font-size:0.8rem; text-transform:capitalize;">
+          {{ user?.role }}
+        </span>
+      </div>
+
+      <div class="fg mb-3">
+        <label>Full Name</label>
+        <input type="text" [(ngModel)]="name" />
+      </div>
+      <div class="fg mb-3">
+        <label>Email</label>
+        <input type="email" [value]="user?.email" disabled />
+      </div>
+      <div class="fg mb-3">
+        <label>Phone</label>
+        <input type="tel" [(ngModel)]="phone" placeholder="+880..." />
+      </div>
+      <div class="fg mb-3">
+        <label>Role</label>
+        <input type="text" [value]="user?.role" disabled style="text-transform:capitalize;" />
+      </div>
+
+      <div class="success-msg" *ngIf="saved">✅ Profile updated successfully!</div>
+      <button class="auth-btn mt-2" (click)="save()">Save Changes</button>
+    </div>
+  </div>
+</ng-template>

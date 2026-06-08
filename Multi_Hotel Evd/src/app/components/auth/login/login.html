@@ -1,0 +1,51 @@
+<div class="auth-wrap">
+  <div class="auth-left">
+    <div class="auth-brand">Stay<span>Sphere</span></div>
+    <h1 class="auth-heading">Find your <span class="gold">perfect stay</span>, every time.</h1>
+    <p class="auth-desc">Join 2M+ travelers who trust StaySphere for unforgettable hotel experiences across Bangladesh and beyond.</p>
+    <div class="auth-stats">
+      <div class="as"><span class="asn">50K+</span><span class="asl">Hotels</span></div>
+      <div class="as"><span class="asn">4.9★</span><span class="asl">Avg Rating</span></div>
+      <div class="as"><span class="asn">2M+</span><span class="asl">Guests</span></div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="ac-top">
+        <h2>Welcome Back</h2>
+        <p>Sign in to your StaySphere account</p>
+      </div>
+
+      <div class="fg">
+        <label>Email Address</label>
+        <input type="email" [(ngModel)]="email"
+               placeholder="you@email.com"
+               (keyup.enter)="doLogin()" />
+      </div>
+
+      <div class="fg mt-3">
+        <label>Password</label>
+        <input type="password" [(ngModel)]="password"
+               placeholder="••••••••"
+               (keyup.enter)="doLogin()" />
+      </div>
+
+      <div class="auth-forgot">
+        <a routerLink="/auth/forgot-password">Forgot password?</a>
+      </div>
+
+      <div class="error-msg" *ngIf="error">{{ error }}</div>
+
+      <button class="auth-btn" (click)="doLogin()" [disabled]="loading">
+        <span *ngIf="!loading">Sign In →</span>
+        <span *ngIf="loading">Signing in...</span>
+      </button>
+
+      <div class="auth-switch">
+        Don't have an account?
+        <a routerLink="/auth/register">Create one →</a>
+      </div>
+    </div>
+  </div>
+</div>

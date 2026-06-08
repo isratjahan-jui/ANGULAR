@@ -1,0 +1,456 @@
+<div class="hotel-details-container" *ngIf="!loading && hotel">
+
+  <!-- HERO SECTION -->
+  <div
+    class="hero-section"
+    [style.background-image]="
+      'url(' +
+      (
+        activeImage ||
+        hotel.image ||
+        hotel.images?.[0] ||
+        'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb'
+      ) +
+      ')'
+    "
+  >
+    <div class="hero-overlay">
+
+      <!-- Back Button -->
+      <button class="back-btn" (click)="router.navigate(['/'])">
+        ← Back
+      </button>
+
+      <div class="hero-content">
+
+        <!-- Deal Badge -->
+        <div class="badge" *ngIf="hotel.deal">
+          Exclusive Deal
+        </div>
+
+        <!-- Emoji -->
+        <div class="dh-emoji" *ngIf="!hotel.image">
+          {{ hotel.emoji }}
+        </div>
+
+        <!-- Hotel Type -->
+        <div class="dh-type">
+          {{ hotel.type }}
+        </div>
+
+        <!-- Hotel Name -->
+        <div class="name-wishlist">
+          <h1>{{ hotel.name }}</h1>
+          <button class="details-wishlist-btn" (click)="toggleWishlist()">
+            <i class="fa-heart" [class.fas]="isInWishlist()" [class.far]="!isInWishlist()" [class.active]="isInWishlist()"></i>
+          </button>
+        </div>
+
+        <!-- Rating -->
+        <div class="rating">
+          <span class="stars">
+            {{ getStars(hotel.rating) }}
+          </span>
+
+          <span class="score">
+            {{ hotel.rating }} / 5.0
+          </span>
+        </div>
+
+        <!-- Location -->
+        <p class="location">
+          <i class="fas fa-map-marker-alt"></i>
+          {{ hotel.location }}
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- IMAGE GALLERY -->
+  <div
+    class="gallery-section"
+    *ngIf="hotel.images && hotel.images.length > 0"
+  >
+    <div class="container">
+
+      <!-- Main Image -->
+      <div class="gallery-main">
+        <img
+          [src]="activeImage || hotel.images[0]"
+          [alt]="hotel.name"
+        />
+      </div>
+
+      <!-- Thumbnail Images -->
+      <div class="gallery-thumbs">
+
+        <div
+          class="gallery-thumb"
+          *ngFor="let img of hotel.images"
+          [class.thumb-active]="img === activeImage"
+          (click)="setActiveImage(img)"
+        >
+          <img [src]="img" alt="Hotel Image" />
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO SECTION -->
+  <div
+    class="video-section"
+    *ngIf="hotel.videoUrl"
+  >
+    <div class="container">
+
+      <h3 class="vs-title">
+        🎥 Hotel Tour Video
+      </h3>
+
+      <div class="video-wrap">
+
+        <iframe
+          [src]="getEmbedUrl(hotel.videoUrl)"
+          frameborder="0"
+          allowfullscreen
+        >
+        </iframe>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <!-- LEFT COLUMN -->
+    <div class="left-col">
+
+      <!-- ABOUT -->
+      <section class="description-card">
+
+        <h2>About the Hotel</h2>
+
+        <p>
+          {{ hotel.description }}
+        </p>
+
+        <!-- Facilities -->
+        <div class="facilities">
+
+          <div
+            class="facility-chip"
+            *ngFor="let f of hotel.facilities"
+          >
+            <i class="fas fa-check"></i>
+            {{ f }}
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ROOMS -->
+      <section class="rooms-section">
+
+        <h2>Available Rooms</h2>
+
+        <div class="rooms-list">
+
+          <div
+            class="room-card"
+            *ngFor="let room of rooms"
+            [class.selected]="selectedRoom?.id === room.id"
+            (click)="selectRoom(room)"
+          >
+
+            <!-- Room Image -->
+            <div class="room-img-container">
+
+              <img
+                [src]="room.images[0] || 'https://via.placeholder.com/300x200'"
+                alt="Room"
+              />
+
+              <!-- Selected Overlay -->
+              <div
+                class="selected-overlay"
+                *ngIf="selectedRoom?.id === room.id"
+              >
+                <i class="fas fa-check-circle"></i>
+              </div>
+
+            </div>
+
+            <!-- Room Info -->
+            <div class="room-info">
+
+              <h3>
+                {{ room.roomType }}
+              </h3>
+
+              <p class="room-desc">
+                {{ room.description }}
+              </p>
+
+              <div class="room-meta">
+
+                <span>
+                  <i class="fas fa-users"></i>
+                  {{ room.capacity }} Guests
+                </span>
+
+                <span class="room-price">
+                  ৳{{ room.price }}
+                  <small>/night</small>
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- EXTRA SERVICES -->
+      <section class="extra-services">
+
+        <h2>Extra Services</h2>
+
+        <div class="services-grid">
+
+          <div
+            class="service-card"
+            *ngFor="let s of extraServices"
+            [class.active]="s.selected"
+            (click)="toggleService(s)"
+          >
+
+            <!-- Icon -->
+            <div class="service-icon">
+
+              <i
+                class="fas"
+                [ngClass]="{
+                  'fa-utensils': s.name.includes('Breakfast'),
+                  'fa-shuttle-van': s.name.includes('Airport'),
+                  'fa-spa': s.name.includes('Spa')
+                }"
+              >
+              </i>
+
+            </div>
+
+            <!-- Service Info -->
+            <div class="service-info">
+
+              <h4>
+                {{ s.name }}
+              </h4>
+
+              <p>
+                ৳{{ s.price }}
+              </p>
+
+            </div>
+
+            <!-- Checkbox -->
+            <div class="check-box">
+
+              <i
+                class="fas"
+                [ngClass]="
+                  s.selected
+                    ? 'fa-check-square'
+                    : 'fa-square'
+                "
+              >
+              </i>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- REVIEWS -->
+      <section class="reviews-section mt-5" style="margin-top: 2rem;">
+        <h2>Guest Reviews</h2>
+        
+        <app-add-review 
+          *ngIf="hotel"
+          [hotelId]="hotel.id!"
+          (reviewAdded)="onReviewAdded($event)">
+        </app-add-review>
+
+        <div class="reviews-list mt-4" style="margin-top: 1.5rem;">
+          <div *ngIf="reviews.length === 0" class="alert alert-secondary text-center p-4 rounded text-muted">
+            No reviews yet. Be the first to review!
+          </div>
+          
+          <div class="review-card mb-3 p-3" style="background: var(--white); border-radius: var(--radius2); border: 1px solid var(--border); margin-bottom: 1rem;" *ngFor="let r of reviews">
+            <div class="d-flex justify-content-between align-items-center mb-2" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <h5 class="m-0 fw-bold" style="margin: 0; color: var(--navy);">{{ r.userName }}</h5>
+              <span class="text-muted small" style="color: var(--muted); font-size: 0.85rem;">{{ r.date | date }}</span>
+            </div>
+            <div class="mb-2" style="margin-bottom: 0.5rem;">
+              <span class="text-warning" style="color: var(--gold);">
+                {{ getStars(r.rating) }}
+              </span>
+              <span *ngIf="r.verified" style="display: inline-block; padding: 2px 6px; background: #d1fae5; color: #065f46; border-radius: 4px; font-size: 0.75rem; margin-left: 8px; font-weight: 600;">
+                <i class="fas fa-check-circle"></i> Verified Stay
+              </span>
+            </div>
+            <p class="m-0" style="margin: 0; color: var(--text);">{{ r.comment }}</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="right-col">
+
+      <div class="booking-sticky-card">
+
+        <h3>
+          Reserve Your Stay
+        </h3>
+
+        <div class="booking-form">
+
+          <!-- Dates -->
+          <div class="date-inputs">
+
+            <div class="input-group">
+
+              <label>
+                Check-in
+              </label>
+
+              <input
+                type="date"
+                [(ngModel)]="checkIn"
+                (change)="calcTotal()"
+              />
+
+            </div>
+
+            <div class="input-group">
+
+              <label>
+                Check-out
+              </label>
+
+              <input
+                type="date"
+                [(ngModel)]="checkOut"
+                (change)="calcTotal()"
+              />
+
+            </div>
+
+          </div>
+
+          <!-- Guests -->
+          <div class="input-group full">
+
+            <label>
+              Guests
+            </label>
+
+            <input
+              type="number"
+              [(ngModel)]="guests"
+              min="1"
+              max="10"
+            />
+
+          </div>
+
+          <!-- Price Summary -->
+          <div
+            class="price-summary"
+            *ngIf="selectedRoom"
+          >
+
+            <div class="price-row">
+
+              <span>
+                {{ selectedRoom.roomType }}
+                x
+                {{ nights }} nights
+              </span>
+
+              <span>
+                ৳{{ selectedRoom.price * nights }}
+              </span>
+
+            </div>
+
+            <!-- Extra Services -->
+            <div
+              class="price-row"
+              *ngFor="let s of extraServices"
+            >
+
+              <ng-container *ngIf="s.selected">
+
+                <span>
+                  {{ s.name }}
+                </span>
+
+                <span>
+                  +৳{{ s.price }}
+                </span>
+
+              </ng-container>
+
+            </div>
+
+            <hr />
+
+            <!-- Total -->
+            <div class="price-row total">
+
+              <span>
+                Total Price
+              </span>
+
+              <span>
+                ৳{{ totalPrice }}
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- Button -->
+          <button
+            class="btn-reserve"
+            (click)="proceedToBooking()"
+            [disabled]="!selectedRoom"
+          >
+            Proceed to Checkout
+          </button>
+
+          <p class="note">
+            You won't be charged yet
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

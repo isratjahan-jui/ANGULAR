@@ -1,0 +1,49 @@
+<div class="add-review-wrapper">
+  <div *ngIf="loading" class="text-center p-3 text-muted">
+    <i class="fas fa-spinner fa-spin"></i> Checking review eligibility...
+  </div>
+  
+  <div *ngIf="!loading && !canReview" class="alert alert-info">
+    <i class="fas fa-info-circle"></i> You must book and stay at this hotel before you can leave a review.
+  </div>
+
+  <div *ngIf="!loading && canReview && !hasReviewed" class="add-review-card">
+    <h4>Leave a Review</h4>
+    <p class="text-muted small mb-3">
+      <i class="fas fa-check-circle text-success"></i> Verified Stay
+    </p>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Rating</label>
+      <select class="form-select" [(ngModel)]="newReview.rating">
+        <option [value]="5">5 - Excellent</option>
+        <option [value]="4">4 - Very Good</option>
+        <option [value]="3">3 - Average</option>
+        <option [value]="2">2 - Poor</option>
+        <option [value]="1">1 - Terrible</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Your Review</label>
+      <textarea 
+        class="form-control" 
+        rows="3" 
+        [(ngModel)]="newReview.comment" 
+        placeholder="Tell us about your stay..."
+      ></textarea>
+    </div>
+
+    <button 
+      class="btn btn-gold w-100" 
+      (click)="submitReview()" 
+      [disabled]="submitting || !newReview.comment"
+    >
+      {{ submitting ? 'Submitting...' : 'Submit Review' }}
+    </button>
+  </div>
+
+  <div *ngIf="hasReviewed" class="alert alert-success">
+    <i class="fas fa-check-circle"></i> Thank you! Your review has been submitted successfully.
+  </div>
+</div>

@@ -1,0 +1,277 @@
+<app-customer-layout
+  pageTitle="Manage Your Bookings"
+  pageSub="View history and track your upcoming stays">
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-4">
+    <div class="spinner-border" style="color:#c9a84c;"></div>
+  </div>
+
+  <ng-container *ngIf="!loading">
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <div class="s-card">
+        <div class="sc-icon">✅</div>
+        <div class="sc-label">Confirmed Stays</div>
+        <div class="sc-val">{{ getConfirmedCount() }}</div>
+      </div>
+      <div class="s-card">
+        <div class="sc-icon">💰</div>
+        <div class="sc-label">Total Investment</div>
+        <div class="sc-val">৳{{ getTotalSpent() | number }}</div>
+      </div>
+      <div class="s-card">
+        <div class="sc-icon">🌙</div>
+        <div class="sc-label">Total Nights</div>
+        <div class="sc-val">{{ getTotalNights() }}</div>
+      </div>
+    </div>
+
+    <!-- Bookings Grid -->
+    <div class="bookings-grid">
+      <div class="booking-card" *ngFor="let b of bookings">
+
+        <!-- Card Header -->
+        <div class="bc-header">
+          <div class="bc-emoji">{{ b.hotelEmoji }}</div>
+          <div class="bc-info">
+            <h3>{{ b.hotelName }}</h3>
+            <p>{{ b.hotelLocation }}</p>
+          </div>
+          <div class="bc-status" [class]="b.status.toLowerCase()">
+            {{ b.status }}
+          </div>
+        </div>
+
+        <!-- Card Body -->
+        <div class="bc-body">
+          <div class="bc-row">
+            <span>Room</span>
+            <strong>{{ b.roomType }}</strong>
+          </div>
+          <div class="bc-row">
+            <span>Check-in</span>
+            <strong>{{ b.checkIn }}</strong>
+          </div>
+          <div class="bc-row">
+            <span>Check-out</span>
+            <strong>{{ b.checkOut }}</strong>
+          </div>
+          <div class="bc-row">
+            <span>Nights</span>
+            <strong>{{ b.nights }}</strong>
+          </div>
+          <div class="bc-row">
+            <span>Guests</span>
+            <strong>{{ b.guests }}</strong>
+          </div>
+          <div class="bc-row">
+            <span>Payment</span>
+            <strong>{{ b.paymentStatus || 'Paid' }}</strong>
+          </div>
+        </div>
+
+        <!-- Card Footer -->
+        <div class="bc-footer">
+          <div class="bc-price">৳{{ b.totalPrice | number }}</div>
+
+          <div class="bc-actions">
+
+            <!-- Invoice — Modal দিয়ে দেখাবে -->
+            <button class="btn-invoice"
+                    type="button"
+                    (click)="viewInvoice(b.id)"
+                    title="View Invoice">
+              🧾 Invoice
+            </button>
+
+            <!-- Invoice — নতুন page এ দেখাতে চাইলে এটা use করো -->
+            <!-- <a [routerLink]="['/payment/invoice', b.id]"
+                  class="btn-invoice">
+              🧾 Invoice
+            </a> -->
+
+            <!-- Cancel Button -->
+            <button
+              class="btn-cancel"
+              type="button"
+              *ngIf="b.status !== 'cancelled' && b.status !== 'checkedOut'"
+              (click)="cancelBooking(b.id)">
+              ✕ Cancel
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="bookings.length === 0">
+      <div class="es-icon">📭</div>
+      <h3>No bookings found</h3>
+      <p>Ready to start your next adventure?</p>
+      <button class="btn-primary"
+              type="button"
+              (click)="browseHotels()">
+        Find Hotels →
+      </button>
+    </div>
+
+  </ng-container>
+
+  <!-- ══════════════════════════════════
+       INVOICE MODAL
+  ══════════════════════════════════ -->
+  <div class="modal-overlay"
+       *ngIf="showInvoiceModal"
+       (click)="showInvoiceModal = false">
+
+    <div class="invoice-box"
+         (click)="$event.stopPropagation()">
+
+      <!-- Invoice Loading -->
+      <div *ngIf="invoiceLoading" class="inv-loading">
+        <div class="inv-spinner"></div>
+        <p>Loading invoice...</p>
+      </div>
+
+      <!-- Invoice Content -->
+      <div *ngIf="!invoiceLoading && selectedInvoice">
+
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+          <div>
+            <div class="logo-text">
+              Stay<span>Sphere</span>
+            </div>
+            <div class="logo-sub">Premium Hotel Booking</div>
+          </div>
+          <div class="invoice-info">
+            <h2>INVOICE</h2>
+            <p class="inv-no">#{{ selectedInvoice.invoiceNumber }}</p>
+            <p class="inv-date">
+              {{ selectedInvoice.issuedAt | date:'mediumDate' }}
+            </p>
+          </div>
+        </div>
+
+        <div class="inv-divider"></div>
+
+        <!-- Hotel Info -->
+        <div class="inv-hotel-row">
+          <div class="ihr-left">
+            <div class="ihr-label">Billed To</div>
+            <div class="ihr-val">{{ selectedInvoice.customerName }}</div>
+          </div>
+          <div class="ihr-right">
+            <div class="ihr-label">Hotel</div>
+            <div class="ihr-val">{{ selectedInvoice.hotelName }}</div>
+            <div class="ihr-sub">{{ selectedInvoice.roomType }}</div>
+          </div>
+        </div>
+
+        <!-- Stay Info -->
+        <div class="inv-stay-row" *ngIf="selectedInvoice.checkIn">
+          <div class="isr-item">
+            <span class="isr-label">Check-in</span>
+            <span class="isr-val">{{ selectedInvoice.checkIn }}</span>
+          </div>
+          <div class="isr-arrow">→</div>
+          <div class="isr-item">
+            <span class="isr-label">Check-out</span>
+            <span class="isr-val">{{ selectedInvoice.checkOut }}</span>
+          </div>
+          <div class="isr-item">
+            <span class="isr-label">Nights</span>
+            <span class="isr-val">{{ selectedInvoice.nights }}</span>
+          </div>
+        </div>
+
+        <!-- Billing Table -->
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th class="text-right">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="it-main">
+                  {{ selectedInvoice.roomType }} Accommodation
+                </div>
+                <div class="it-sub">
+                  {{ selectedInvoice.nights }} night(s) ×
+                  ৳{{ selectedInvoice.pricePerNight | number }}
+                </div>
+              </td>
+              <td class="text-right">
+                ৳{{ selectedInvoice.amount | number }}
+              </td>
+            </tr>
+            <tr class="tax-row">
+              <td>Tax & Service Charge (5%)</td>
+              <td class="text-right">
+                ৳{{ selectedInvoice.tax | number }}
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td><strong>Total Amount</strong></td>
+              <td class="text-right">
+                <strong>৳{{ selectedInvoice.total | number }}</strong>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Invoice Footer -->
+        <div class="inv-footer-note">
+          <div class="ifn-status">✅ PAID</div>
+          <div class="ifn-note">
+            Transaction ID: {{ selectedInvoice.transactionId || 'N/A' }}
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="inv-btn-row">
+          <button class="btn-close-inv"
+                  type="button"
+                  (click)="showInvoiceModal = false">
+            Close
+          </button>
+          <button class="btn-print"
+                  type="button"
+                  (click)="printInvoice()">
+            🖨 Print
+          </button>
+          <!-- Full Page Invoice -->
+          <a [routerLink]="['/payment/invoice', selectedInvoice.bookingId]"
+             class="btn-full-inv"
+             (click)="showInvoiceModal = false">
+            📄 Full Invoice
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Invoice Not Found -->
+      <div *ngIf="!invoiceLoading && !selectedInvoice"
+           class="inv-not-found">
+        <div style="font-size:2.5rem;">📄</div>
+        <h4>Invoice not found</h4>
+        <p>This booking may not have a payment record yet.</p>
+        <button type="button"
+                (click)="showInvoiceModal = false">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</app-customer-layout>

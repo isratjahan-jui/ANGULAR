@@ -1,0 +1,54 @@
+<app-owner-layout
+  pageTitle="Guest Reservations"
+  pageSub="Manage check-ins, check-outs, and booking requests">
+
+  <div class="bookings-table-container">
+    <table class="bookings-table">
+      <thead>
+        <tr>
+          <th>Guest</th>
+          <th>Room Type</th>
+          <th>Dates</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of bookings">
+          <td>
+            <div class="guest-info">
+              <div class="avatar">{{ b.roomType[0] }}</div>
+              <span>Guest ID: {{ b.userId }}</span>
+            </div>
+          </td>
+          <td>{{ b.roomType }}</td>
+          <td>{{ b.checkIn }} to {{ b.checkOut }}</td>
+          <td>৳{{ b.totalPrice }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="b.status.toLowerCase()">{{ b.status }}</span>
+          </td>
+          <td>
+            <div class="actions">
+              <button class="btn-sm btn-checkin"
+                      *ngIf="b.status === 'confirmed'"
+                      (click)="markCheckIn(b.id)">
+                Check In
+              </button>
+              <button class="btn-sm btn-checkout"
+                      *ngIf="b.status === 'checkedIn'"
+                      (click)="markCheckOut(b.id)">
+                Check Out
+              </button>
+              <button class="btn-sm btn-cancel"
+                      *ngIf="b.status !== 'cancelled' && b.status !== 'checkedOut'"
+                      (click)="cancelBooking(b.id)">
+                Cancel
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</app-owner-layout>

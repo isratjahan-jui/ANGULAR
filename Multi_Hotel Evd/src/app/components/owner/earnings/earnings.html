@@ -1,0 +1,198 @@
+<app-owner-layout
+  pageTitle="Earnings Overview"
+  pageSub="Track your revenue, commissions and net earnings">
+
+    <!-- METRICS -->
+    <div class="metrics-grid">
+      <div class="metric-card mc-navy">
+        <div class="mc-icon">💵</div>
+        <div class="mc-val">৳{{ grossRevenue | number }}</div>
+        <div class="mc-label">Gross Revenue</div>
+        <div class="mc-sub">From {{ totalBookings }} confirmed bookings</div>
+      </div>
+      <div class="metric-card mc-red">
+        <div class="mc-icon">🏦</div>
+        <div class="mc-val">৳{{ commission | number }}</div>
+        <div class="mc-label">Platform Commission</div>
+        <div class="mc-sub">{{ commissionRate * 100 }}% of gross revenue</div>
+      </div>
+      <div class="metric-card mc-green">
+        <div class="mc-icon">💰</div>
+        <div class="mc-val">৳{{ netEarnings | number }}</div>
+        <div class="mc-label">Net Earnings</div>
+        <div class="mc-sub">{{ (100 - commissionRate * 100) }}% after commission</div>
+      </div>
+      <div class="metric-card mc-gold">
+        <div class="mc-icon">🌙</div>
+        <div class="mc-val">{{ totalNights }}</div>
+        <div class="mc-label">Total Nights Booked</div>
+        <div class="mc-sub">Across {{ myHotels.length }} hotel(s)</div>
+      </div>
+    </div>
+
+    <!-- EARNINGS CHART -->
+    <div class="section-card mb-4">
+      <div class="sc-header">
+        <h3 class="sc-title">📈 Monthly Net Earnings Trend</h3>
+      </div>
+      <div style="position: relative; height: 300px; width: 100%; padding: 1rem;">
+        <canvas id="earningsChart"></canvas>
+      </div>
+    </div>
+
+    <!-- COMMISSION BREAKDOWN -->
+    <div class="section-card mb-4">
+      <div class="sc-header">
+        <h3 class="sc-title">💡 Commission Breakdown</h3>
+      </div>
+      <div class="commission-visual">
+        <div class="cv-box cv-gross">
+          <div class="cvb-label">Gross Revenue</div>
+          <div class="cvb-val">৳{{ grossRevenue | number }}</div>
+          <div class="cvb-pct">100%</div>
+        </div>
+        <div class="cv-arrow">→</div>
+        <div class="cv-box cv-commission">
+          <div class="cvb-label">Commission ({{ commissionRate * 100 | number:'1.0-0' }}%)</div>
+          <div class="cvb-val">৳{{ commission | number }}</div>
+          <div class="cvb-pct">Goes to Platform</div>
+        </div>
+        <div class="cv-plus">+</div>
+        <div class="cv-box cv-net">
+          <div class="cvb-label">Your Earnings ({{ (1 - commissionRate) * 100 | number:'1.0-0' }}%)</div>
+          <div class="cvb-val">৳{{ netEarnings | number }}</div>
+          <div class="cvb-pct">You Keep</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PER HOTEL STATS -->
+    <div class="section-card mb-4" *ngIf="myHotels.length > 0">
+      <div class="sc-header">
+        <h3 class="sc-title">🏨 Per Hotel Performance</h3>
+      </div>
+      <div class="hotel-stats-grid">
+        <div class="hotel-stat-card" *ngFor="let hs of perHotelStats()">
+          <div class="hsc-top">
+            <span class="hsc-emoji">{{ hs.hotel.emoji }}</span>
+            <div>
+              <div class="hsc-name">{{ hs.hotel.name }}</div>
+              <div class="hsc-loc">📍 {{ hs.hotel.location }}</div>
+            </div>
+          </div>
+          <div class="hsc-metrics">
+            <div class="hsc-row">
+              <span class="hsc-label">Bookings</span>
+              <span class="hsc-val">{{ hs.bookings }}</span>
+            </div>
+            <div class="hsc-row">
+              <span class="hsc-label">Gross Revenue</span>
+              <span class="hsc-val">৳{{ hs.gross | number }}</span>
+            </div>
+            <div class="hsc-row hsc-highlight">
+              <span class="hsc-label">Net Earnings</span>
+              <span class="hsc-val green-val">৳{{ hs.net | number }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="myHotels.length === 0" class="empty-mini">No hotels added yet.</div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="section-card mb-4">
+      <div class="sc-header">
+        <h3 class="sc-title">🔍 Filter Transactions</h3>
+        <button class="reset-btn" (click)="resetFilters()">Reset All</button>
+      </div>
+      <div class="filter-row">
+        <div class="fg">
+          <label>Hotel</label>
+          <select [(ngModel)]="filterHotelId" (change)="applyFilters()">
+            <option value="">All Hotels</option>
+            <option *ngFor="let h of myHotels" [value]="h.id">{{ h.name }}</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Month</label>
+          <select [(ngModel)]="filterMonth" (change)="applyFilters()">
+            <option value="">All Months</option>
+            <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Status</label>
+          <select [(ngModel)]="filterStatus" (change)="applyFilters()">
+            <option value="">All Status</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Pending">Pending</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSACTION TABLE -->
+    <div class="section-card">
+      <div class="sc-header">
+        <h3 class="sc-title">📊 Financial Transactions</h3>
+        <span class="result-count">{{ filteredTransactions.length }} records</span>
+      </div>
+
+      <!-- Empty -->
+      <div *ngIf="filteredTransactions.length === 0" class="empty-state">
+        <div class="es-icon">📭</div>
+        <h4>No transactions found</h4>
+        <p>Try adjusting your filters or wait for new bookings.</p>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap" *ngIf="filteredTransactions.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Hotel</th>
+              <th>Date</th>
+              <th>Method</th>
+              <th>Gross</th>
+              <th>Commission</th>
+              <th>Net Earnings</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of filteredTransactions">
+              <td class="td-num"><small>{{ t.transactionId }}</small></td>
+              <td>
+                <div class="hotel-name-cell">
+                  <span class="hn-emoji">{{ getHotelEmoji(String(t.hotelId)) }}</span>
+                  <span class="hn-name">{{ getHotelName(String(t.hotelId)) }}</span>
+                </div>
+              </td>
+              <td>{{ t.createdAt | date:'shortDate' }}</td>
+              <td>{{ t.paymentMethod }}</td>
+              <td class="td-gross">৳{{ t.totalAmount | number }}</td>
+              <td class="td-commission">- ৳{{ t.platformCommission | number }}</td>
+              <td class="td-net">৳{{ t.ownerEarnings | number }}</td>
+              <td>
+                <span class="status-badge" [class.s-confirmed]="t.status === 'Success'">
+                  {{ t.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="totals-row">
+              <td colspan="4" class="totals-label">Total for filtered view</td>
+              <td class="td-gross">৳{{ grossRevenue | number }}</td>
+              <td class="td-commission">- ৳{{ commission | number }}</td>
+              <td class="td-net">৳{{ netEarnings | number }}</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+</app-owner-layout>

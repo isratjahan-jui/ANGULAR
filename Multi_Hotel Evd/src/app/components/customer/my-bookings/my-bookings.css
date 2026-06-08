@@ -1,0 +1,377 @@
+.bookings-container {
+  padding: 3rem 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.page-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.page-header h1 {
+  color: #1a2a6c;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.booking-card {
+  background: white;
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+  transition: transform 0.3s;
+}
+
+.booking-card:hover {
+  transform: translateY(-5px);
+}
+
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.hotel-info {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.emoji {
+  font-size: 3rem;
+  background: #f8f9fa;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 18px;
+}
+
+.hotel-info h3 {
+  margin: 0;
+  color: #1a2a6c;
+  font-size: 1.4rem;
+}
+
+.hotel-info p {
+  margin: 0.3rem 0 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.status-badge {
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-badge.confirmed { background: #e6fcf5; color: #0ca678; }
+.status-badge.pending { background: #fff9db; color: #f08c00; }
+.status-badge.cancelled { background: #fff5f5; color: #f03e3e; }
+.status-badge.checkedin { background: #e7f5ff; color: #1c7ed6; }
+.status-badge.checkedout { background: #f8f9fa; color: #495057; }
+
+.booking-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.info-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: #999;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.info-group span {
+  font-weight: 600;
+  color: #333;
+}
+
+.total-price {
+  color: #b21f1f;
+  font-size: 1.2rem;
+}
+
+.booking-footer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btn-invoice, .btn-cancel {
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-invoice {
+  background: #f0f4ff;
+  color: #1a2a6c;
+  border: none;
+}
+
+.btn-cancel {
+  background: #fff5f5;
+  color: #f03e3e;
+  border: none;
+}
+
+.btn-invoice:hover { background: #1a2a6c; color: white; }
+.btn-cancel:hover { background: #f03e3e; color: white; }
+
+/* Premium Invoice Modal */
+.invoice-box {
+  background: white;
+  width: 95%;
+  max-width: 700px;
+  padding: 3.5rem;
+  border-radius: 24px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.invoice-box::before {
+  content: 'STAYSPHERE';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  font-size: 8rem;
+  font-weight: 900;
+  color: rgba(0,0,0,0.02);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.invoice-brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  border-bottom: 2px solid #1a2a6c;
+  padding-bottom: 1.5rem;
+}
+
+.brand-logo {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #0a1628;
+}
+
+.brand-logo span { color: #c9a84c; }
+
+.invoice-title {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #1a2a6c;
+  font-size: 1.2rem;
+}
+
+.invoice-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+.invoice-meta label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #999;
+  letter-spacing: 1px;
+  margin-bottom: 0.3rem;
+}
+
+.invoice-meta p {
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.paid-badge {
+  background: #27ae60;
+  color: white;
+  padding: 0.2rem 1rem;
+  border-radius: 4px;
+  display: inline-block;
+  font-size: 0.9rem;
+}
+
+.invoice-parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 16px;
+}
+
+.party label {
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.party h4 {
+  margin: 0;
+  color: #1a2a6c;
+  font-size: 1.1rem;
+}
+
+.party p {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2.5rem;
+}
+
+.invoice-table th {
+  text-align: left;
+  background: #f1f4f9;
+  padding: 1rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.invoice-table td {
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.invoice-table td strong {
+  display: block;
+  color: #1a2a6c;
+}
+
+.invoice-table td small {
+  display: block;
+  color: #999;
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
+}
+
+.invoice-total {
+  margin-left: auto;
+  width: 100%;
+  max-width: 300px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  color: #666;
+}
+
+.grand-total {
+  border-top: 2px solid #eee;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  color: #1a2a6c;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.invoice-footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px dashed #ddd;
+  text-align: center;
+}
+
+.invoice-footer p {
+  font-size: 0.8rem;
+  color: #999;
+  margin-bottom: 2rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.btn-print {
+  background: #1a2a6c;
+  color: white;
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.btn-close {
+  background: #f1f4f9;
+  color: #555;
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-print:hover {
+  background: #c9a84c;
+  color: #1a2a6c;
+  transform: translateY(-2px);
+}
+
+/* Print Styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .invoice-box, .invoice-box * {
+    visibility: visible;
+  }
+  .invoice-box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  .actions {
+    display: none;
+  }
+}

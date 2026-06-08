@@ -1,0 +1,65 @@
+<div class="page-hero">
+  <h1>Edit Hotel</h1>
+  <p>Update your hotel information</p>
+</div>
+
+<div class="container my-5" *ngIf="hotel">
+  <div class="form-card">
+
+    <div class="success-msg" *ngIf="success">✅ Hotel updated successfully!</div>
+
+    <div class="form-section">
+      <h4 class="fs-title">Basic Information</h4>
+      <div class="form-row">
+        <div class="fg">
+          <label>Hotel Name *</label>
+          <input type="text" [(ngModel)]="hotel.name" />
+        </div>
+        <div class="fg">
+          <label>Location *</label>
+          <select [(ngModel)]="hotel.location">
+            <option *ngFor="let l of locations" [value]="l">{{ l }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg mt-3">
+        <label>Description *</label>
+        <textarea [(ngModel)]="hotel.description" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="form-section mt-4">
+      <h4 class="fs-title">Room & Pricing</h4>
+      <div class="form-row">
+        <div class="fg">
+          <label>Room Type</label>
+          <select [(ngModel)]="hotel.type">
+            <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Price per Night (৳) *</label>
+          <input type="number" [(ngModel)]="hotel.price" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section mt-4">
+      <h4 class="fs-title">Facilities</h4>
+      <div class="fg">
+        <label>Facilities (comma separated)</label>
+        <input type="text" [(ngModel)]="facilitiesInput" placeholder="WiFi, Pool, Gym" />
+      </div>
+    </div>
+
+    <div class="error-msg" *ngIf="error">⚠ {{ error }}</div>
+
+    <div class="form-actions mt-4">
+      <button class="cancel-btn" routerLink="/owner/my-hotels">Cancel</button>
+      <button class="submit-btn" (click)="update()" [disabled]="loading">
+        <span *ngIf="!loading">Update Hotel →</span>
+        <span *ngIf="loading">Updating...</span>
+      </button>
+    </div>
+  </div>
+</div>

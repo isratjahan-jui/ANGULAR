@@ -1,0 +1,35 @@
+<app-customer-layout
+  pageTitle="My Wishlist"
+  pageSub="Hotels you saved for later">
+
+  <div class="hotel-grid">
+    <div class="hotel-card" *ngFor="let h of wishlist" [routerLink]="['/hotel', h.id]">
+      <div class="hotel-img">
+        <img [src]="h.image || 'https://via.placeholder.com/300x200'" alt="Hotel">
+        <div class="price-tag">৳{{h.price}}</div>
+        <button class="wishlist-btn" (click)="removeFromWishlist(h.id); $event.stopPropagation()">
+          <i class="fas fa-heart active"></i>
+        </button>
+      </div>
+      <div class="hotel-info">
+        <h3>{{h.name}}</h3>
+        <p class="loc"><i class="fas fa-map-marker-alt"></i> {{h.location}}</p>
+        <div class="rating">
+          <span class="stars">{{getStars(h.rating)}}</span>
+          <span class="score">{{h.rating}}</span>
+        </div>
+        <div class="tags">
+          <span class="tag" *ngFor="let f of h.facilities | slice:0:3">{{f}}</span>
+        </div>
+        <button class="btn-view">View Details</button>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="wishlist.length === 0">
+      <div class="empty-icon">❤️</div>
+      <h3>Your wishlist is empty</h3>
+      <p>Explore hotels and save your favorites here!</p>
+      <button class="btn-primary mt-3" routerLink="/hotels">Browse Hotels</button>
+    </div>
+  </div>
+</app-customer-layout>
